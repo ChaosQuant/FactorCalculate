@@ -20,7 +20,6 @@ from vision.utillities.calc_tools import CalcTools
 from ultron.cluster.invoke.cache_data import cache_data
 
 
-
 class FactorContrarian(FactorBase):
     def __init__(self, name):
         super(FactorContrarian, self).__init__(name)
@@ -32,15 +31,15 @@ class FactorContrarian(FactorBase):
                     `id` varchar(32) NOT NULL,
                     `symbol` varchar(24) NOT NULL,
                     `trade_date` date NOT NULL,
-                    `sales_cost_ratio_ttm` decimal(19,4),
-                    `tax_ratio_ttm` decimal(19,4),
-                    `financail_expense_rate_ttm` decimal(19,4),
-                    `operating_expense_rate_ttm` decimal(19,4),
-                    `admini_expense_rate_ttm` decimal(19,4),
-                    `period_costs_rate_ttm` decimal(19,4),
-                    `debt_tangible_equity_ratio_latest` decimal(19,4),
-                    `debts_asset_ratio_latest` decimal(19,4),
-                    `inte_bear_debt_to_total_capital_latest` decimal(19,4),
+                    `SalesCostTTM` decimal(19,4),
+                    `TaxRTTM` decimal(19,4),
+                    `FinExpTTM` decimal(19,4),
+                    `OperExpTTM` decimal(19,4),
+                    `AdminExpTTM` decimal(19,4),
+                    `PeridCostTTM` decimal(19,4),
+                    `DTE` decimal(19,4),
+                    `DA` decimal(19,4),
+                    `IntBDToCap` decimal(19,4),
                      PRIMARY KEY(`id`,`trade_date`,`symbol`)
                     )ENGINE=InnoDB DEFAULT CHARSET=utf8;""".format(self._name)
         super(FactorContrarian, self)._create_tables(create_sql, drop_sql)
@@ -49,7 +48,7 @@ class FactorContrarian(FactorBase):
     def sales_cost_ratio_ttm(self, tp_contrarian, factor_contrarian):
         columns_list = ['operating_cost', 'operating_revenue']
         contrarian = tp_contrarian.loc[:, columns_list]
-        contrarian['sales_cost_ratio_ttm'] = np.where(
+        contrarian['SalesCostTTM'] = np.where(
             CalcTools.is_zero(contrarian['operating_revenue']),
             0, contrarian['operating_cost'] / contrarian['operating_revenue']
         )
@@ -61,7 +60,7 @@ class FactorContrarian(FactorBase):
     def tax_ratio_ttm(self, tp_contrarian, factor_contrarian):
         columns_list = ['operating_tax_surcharges', 'operating_revenue']
         contrarian = tp_contrarian.loc[:, columns_list]
-        contrarian['tax_ratio_ttm'] = np.where(
+        contrarian['TaxRTTM'] = np.where(
             CalcTools.is_zero(contrarian['operating_revenue']), 0,
             contrarian['operating_tax_surcharges'] / contrarian['operating_revenue']
         )
@@ -73,7 +72,7 @@ class FactorContrarian(FactorBase):
     def financial_expense_rate_ttm(self, tp_contrarian, factor_contrarian):
         columns_list = ['financial_expense', 'total_operating_cost']
         contrarian = tp_contrarian.loc[:, columns_list]
-        contrarian['financail_expense_rate_ttm'] = np.where(
+        contrarian['FinExpTTM'] = np.where(
             CalcTools.is_zero(contrarian['total_operating_cost']), 0,
             contrarian['financial_expense'] / contrarian['total_operating_cost']
         )
@@ -85,7 +84,7 @@ class FactorContrarian(FactorBase):
     def operating_expense_rate_ttm(self, tp_contrarian, factor_contrarian):
         columns_list = ['sale_expense', 'total_operating_cost', 'total_operating_revenue']
         contrarian = tp_contrarian.loc[:, columns_list]
-        contrarian['operating_expense_rate_ttm'] = np.where(
+        contrarian['OperExpTTM'] = np.where(
             CalcTools.is_zero(contrarian['total_operating_cost']), 0,
             contrarian['sale_expense'] / contrarian['total_operating_revenue']
         )
@@ -97,7 +96,7 @@ class FactorContrarian(FactorBase):
     def admini_expense_rate_ttm(self, tp_contrarian, factor_contrarian):
         columns_list = ['administration_expense', 'total_operating_revenue']
         contrarian = tp_contrarian.loc[:, columns_list]
-        contrarian['admini_expense_rate_ttm'] = np.where(
+        contrarian['AdminExpTTM'] = np.where(
             CalcTools.is_zero(contrarian['total_operating_revenue']), 0,
             contrarian['administration_expense'] / contrarian['total_operating_revenue']
         )
@@ -109,7 +108,7 @@ class FactorContrarian(FactorBase):
     def period_costs_rate_ttm(self, tp_contrarian, factor_contrarian):
         columns_list = ['financial_expense', 'sale_expense', 'administration_expense', 'operating_revenue']
         contrarian = tp_contrarian.loc[:, columns_list]
-        contrarian['period_costs_rate_ttm'] = np.where(
+        contrarian['PeridCostTTM'] = np.where(
             CalcTools.is_zero(contrarian['operating_revenue']), 0,
             (contrarian['financial_expense'] + contrarian['sale_expense'] + contrarian['administration_expense']) / \
             contrarian['operating_revenue']
@@ -122,7 +121,7 @@ class FactorContrarian(FactorBase):
     def debt_tangible_equity_ratio_latest(self, tp_contrarian, factor_contrarian):
         columns_list = ['total_liability', 'total_current_liability', 'fixed_assets']
         contrarian = tp_contrarian.loc[:, columns_list]
-        contrarian['debt_tangible_equity_ratio_latest'] = np.where(
+        contrarian['DTE'] = np.where(
             CalcTools.is_zero(contrarian['total_current_liability'] + contrarian['fixed_assets']), 0,
             contrarian['total_current_liability'] / (contrarian['total_current_liability'] + contrarian['fixed_assets'])
         )
@@ -134,7 +133,7 @@ class FactorContrarian(FactorBase):
     def debts_asset_ratio_latest(self, tp_contrarian, factor_contrarian):
         columns_list = ['total_liability', 'total_assets']
         contrarian = tp_contrarian.loc[:, columns_list]
-        contrarian['debts_asset_ratio_latest'] = np.where(
+        contrarian['DA'] = np.where(
             CalcTools.is_zero(contrarian['total_assets']), 0,
             contrarian['total_liability'] / contrarian['total_assets'])
         contrarian = contrarian.drop(columns_list, axis=1)
@@ -147,7 +146,7 @@ class FactorContrarian(FactorBase):
         columns_list = ['interest_bearing_liability', 'fixed_assets', 'total_current_assets',
                         'total_current_liability']
         contrarian = tp_contrarian.loc[:, columns_list]
-        contrarian['inte_bear_debt_to_total_capital_latest'] = np.where(
+        contrarian['IntBDToCap'] = np.where(
             CalcTools.is_zero(contrarian['fixed_assets'] + contrarian['total_current_assets'] + \
                               contrarian['total_current_liability']), 0,
             contrarian['interest_bearing_liability'] / (contrarian['fixed_assets'] + \
