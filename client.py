@@ -504,7 +504,7 @@ def get_basic_earning(trade_date):
 if __name__ == '__main__':
     session1 = str('156099868869460811')
     session2 = str('156099868869460812')
-    # session3 = str('156099868869460813')
+    session3 = str('156099868869460813')
     session4 = str('156099868869460814')
     session5 = str('156099868869460815')
     session6 = str('156099868869460816')
@@ -525,9 +525,9 @@ if __name__ == '__main__':
         history_value = historical_value.HistoricalValue('factor_historical_value')
         history_value.create_dest_tables()
 
-        # scale
-        # scale = factor_per_share_indicators.PerShareIndicators('factor_scale')
-        # scale.create_dest_tables()
+        # per shapre
+        per_share = factor_per_share_indicators.PerShareIndicators('factor_per_share')
+        per_share.create_dest_tables()
 
         # cash flow
         cash_flow = factor_cash_flow.FactorCashFlow('factor_cash_flow')
@@ -538,8 +538,8 @@ if __name__ == '__main__':
         constrain.create_dest_tables()
 
         # earning
-        earning = factor_earning.FactorEarning('factor_earning')
-        earning.create_dest_tables()
+        # earning = factor_earning.FactorEarning('factor_earning')
+        # earning.create_dest_tables()
 
     for date_index in trade_date_sets:
         # factor_growth
@@ -561,14 +561,16 @@ if __name__ == '__main__':
         time2 = time.time()
         print('history_cal_time:{}'.format(time2 - time1))
 
-        # # scale
-        # valuation_sets, ttm_factor_sets, cash_flow_sets, income_sets, balance_sets = get_basic_scale_data(date_index)
-        # valuation_sets = pd.merge(valuation_sets, income_sets, on='symbol')
-        # valuation_sets = pd.merge(valuation_sets, ttm_factor_sets, on='symbol')
-        # valuation_sets = pd.merge(valuation_sets, cash_flow_sets, on='symbol')
-        # valuation_sets = pd.merge(valuation_sets, balance_sets, on='symbol')
-        # cache_data.set_cache(session3, date_index, valuation_sets.to_json(orient='records'))
-        # factor_per_share_indicators.factor_calculate(date_index=date_index, session=session3)
+        # per share indicators
+        valuation_sets, ttm_factor_sets, cash_flow_sets, income_sets, balance_sets = get_basic_scale_data(date_index)
+        valuation_sets = pd.merge(valuation_sets, income_sets, on='symbol')
+        valuation_sets = pd.merge(valuation_sets, ttm_factor_sets, on='symbol')
+        valuation_sets = pd.merge(valuation_sets, cash_flow_sets, on='symbol')
+        valuation_sets = pd.merge(valuation_sets, balance_sets, on='symbol')
+        cache_data.set_cache(session3, date_index, valuation_sets.to_json(orient='records'))
+        factor_per_share_indicators.factor_calculate(date_index=date_index, session=session3)
+        time3 = time.time()
+        print('per_share_cal_time:{}'.format(time3 - time2))
 
         # cash flow
         tp_cash_flow, ttm_factor_sets = get_basic_cash_flow(date_index)
@@ -576,7 +578,7 @@ if __name__ == '__main__':
         cache_data.set_cache(session4 + "2", date_index, ttm_factor_sets.to_json(orient='records'))
         factor_cash_flow.factor_calculate(date_index=date_index, session=session4)
         time4 = time.time()
-        print('cash_flow_cal_time:{}'.format(time4 - time2))
+        print('cash_flow_cal_time:{}'.format(time4 - time3))
 
         # constrain
         balance_sets, ttm_factors_sets = get_basic_constrain(date_index)
@@ -587,11 +589,11 @@ if __name__ == '__main__':
         print('constrain_cal_time:{}'.format(time5 - time4))
 
         # earning
-        tp_earning, ttm_earning_5y, ttm_earning = get_basic_earning(date_index)
-        cache_data.set_cache(session6 + "1", date_index, tp_earning.to_json(orient='records'))
-        cache_data.set_cache(session6 + "2", date_index, ttm_earning_5y.to_json(orient='records'))
-        cache_data.set_cache(session6 + "3", date_index, ttm_earning.to_json(orient='records'))
-        factor_earning.factor_calculate(date_index=date_index, session=session6)
-        time6 = time.time()
-        print('earning_cal_time:{}'.format(time6 - time5))
+        # tp_earning, ttm_earning_5y, ttm_earning = get_basic_earning(date_index)
+        # cache_data.set_cache(session6 + "1", date_index, tp_earning.to_json(orient='records'))
+        # cache_data.set_cache(session6 + "2", date_index, ttm_earning_5y.to_json(orient='records'))
+        # cache_data.set_cache(session6 + "3", date_index, ttm_earning.to_json(orient='records'))
+        # factor_earning.factor_calculate(date_index=date_index, session=session6)
+        # time6 = time.time()
+        # print('earning_cal_time:{}'.format(time6 - time5))
         print('---------------------->')
