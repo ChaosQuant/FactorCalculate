@@ -33,6 +33,10 @@ from ultron.cluster.invoke.cache_data import cache_data
 
 
 class FactorEarning(FactorBase):
+    """
+    收益质量
+        --盈利相关
+    """
     def __init__(self, name):
         super(FactorEarning, self).__init__(name)
 

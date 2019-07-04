@@ -25,21 +25,21 @@ class FactorCashFlow(FactorBase):
                     `id` varchar(32) NOT NULL,
                     `symbol` varchar(24) NOT NULL,
                     `trade_date` date NOT NULL,
-                    `nocf_to_t_liability_ttm` decimal(19,4),
-                    `nocf_to_interest_bear_debt_ttm` decimal(19,4),
-                    `nocf_to_net_debt_ttm` decimal(19,4),
-                    `sale_service_cash_to_or_ttm` decimal(19,4),
-                    `cash_rate_of_sales_ttm` decimal(19,4),
-                    `nocf_to_operating_ni_ttm` decimal(19,4),
-                    `oper_cash_in_to_current_liability_ttm` decimal(19,4),
-                    `cash_to_current_liability_ttm` decimal(19,4),
-                    `cfo_to_ev_ttm` decimal(19,4),
-                    `acca_ttm` decimal(19,4),
-                    `net_profit_cash_cover_ttm` decimal(19,4),
-                    `oper_cash_in_to_asset_ttm` decimal(19,4),
-                    `sales_service_cash_to_or_latest` decimal(19,4),
-                    `cash_rate_of_sales_latest` decimal(19,4),
-                    `nocf_to_operating_ni_latest` decimal(19,4),
+                    `OptCFToLiabilityTTM` decimal(19,4),
+                    `OptCFToIBDTTM` decimal(19,4),
+                    `OptCFToNetDebtTTM` decimal(19,4),
+                    `SaleServCashToOptReTTM` decimal(19,4),
+                    `OptCFToRevTTM` decimal(19,4),
+                    `OptCFToNetIncomeTTM` decimal(19,4),
+                    `OptCFToCurrLiabilityTTM` decimal(19,4),
+                    `CashRatioTTM` decimal(19,4),
+                    `OptToEnterpriseTTM` decimal(19,4),
+                    `OptOnReToAssetTTM` decimal(19,4),
+                    `NetProCashCoverTTM` decimal(19,4),
+                    `OptToAssertTTM` decimal(19,4),
+                    `SalesServCashToOR` decimal(19,4),
+                    `CashOfSales` decimal(19,4),
+                    `NOCFToOpt` decimal(19,4),
                     PRIMARY KEY(`id`,`trade_date`,`symbol`)
                     )ENGINE=InnoDB DEFAULT CHARSET=utf8;""".format(self._name)
         super(FactorCashFlow, self)._create_tables(create_sql, drop_sql)
@@ -48,7 +48,7 @@ class FactorCashFlow(FactorBase):
     def nocf_to_t_liability_ttm(self, ttm_cash_flow, factor_cash_flow):
         columns_list = ['net_operate_cash_flow', 'total_liability']
         cash_flow = ttm_cash_flow.loc[:, columns_list]
-        cash_flow['nocf_to_t_liability_ttm'] = np.where(
+        cash_flow['OptCFToLiabilityTTM'] = np.where(
             CalcTools.is_zero(cash_flow.total_liability.values), 0,
             cash_flow.net_operate_cash_flow.values / cash_flow.total_liability.values)
         cash_flow = cash_flow.drop(columns_list, axis=1)
@@ -59,7 +59,7 @@ class FactorCashFlow(FactorBase):
     def nocf_to_interest_bear_debt_ttm(self, ttm_cash_flow, factor_cash_flow):
         columns_list = ['net_operate_cash_flow', 'total_liability', 'interest_bearing_liability']
         cash_flow = ttm_cash_flow.loc[:, columns_list]
-        cash_flow['nocf_to_interest_bear_debt_ttm'] = np.where(
+        cash_flow['OptCFToIBDTTM'] = np.where(
             CalcTools.is_zero(cash_flow.interest_bearing_liability.values), 0,
             cash_flow.net_operate_cash_flow.values / cash_flow.interest_bearing_liability.values)
         cash_flow = cash_flow.drop(columns_list, axis=1)
@@ -70,7 +70,7 @@ class FactorCashFlow(FactorBase):
     def nocf_to_net_debt_ttm(self, ttm_cash_flow, factor_cash_flow):
         columns_list = ['net_operate_cash_flow', 'net_liability']
         cash_flow = ttm_cash_flow.loc[:, columns_list]
-        cash_flow['nocf_to_net_debt_ttm'] = np.where(CalcTools.is_zero(cash_flow.net_liability.values), 0,
+        cash_flow['OptCFToNetDebtTTM'] = np.where(CalcTools.is_zero(cash_flow.net_liability.values), 0,
                                                      cash_flow.net_operate_cash_flow.values / cash_flow.net_liability.values)
         cash_flow = cash_flow.drop(columns_list, axis=1)
         factor_cash_flow = pd.merge(factor_cash_flow, cash_flow, on="symbol")
@@ -80,7 +80,7 @@ class FactorCashFlow(FactorBase):
     def sale_service_cash_to_or_ttm(self, ttm_cash_flow, factor_cash_flow):
         columns_list = ['goods_sale_and_service_render_cash', 'operating_revenue']
         cash_flow = ttm_cash_flow.loc[:, columns_list]
-        cash_flow['sale_service_cash_to_or_ttm'] = np.where(
+        cash_flow['SaleServCashToOptReTTM'] = np.where(
             CalcTools.is_zero(cash_flow.operating_revenue.values), 0,
             cash_flow.goods_sale_and_service_render_cash.values / cash_flow.operating_revenue.values)
         cash_flow = cash_flow.drop(columns_list, axis=1)
@@ -91,7 +91,7 @@ class FactorCashFlow(FactorBase):
     def cash_rate_of_sales_ttm(self, ttm_cash_flow, factor_cash_flow):
         columns_list = ['net_operate_cash_flow', 'operating_revenue']
         cash_flow = ttm_cash_flow.loc[:, columns_list]
-        cash_flow['cash_rate_of_sales_ttm'] = np.where(
+        cash_flow['OptCFToRevTTM'] = np.where(
             CalcTools.is_zero(cash_flow.operating_revenue.values), 0,
             cash_flow.net_operate_cash_flow.values / cash_flow.operating_revenue.values)
         cash_flow = cash_flow.drop(columns_list, axis=1)
@@ -102,7 +102,7 @@ class FactorCashFlow(FactorBase):
     def nocf_to_operating_ni_ttm(self, ttm_cash_flow, factor_cash_flow):
         columns_list = ['net_operate_cash_flow', 'total_operating_revenue', 'total_operating_cost']
         cash_flow = ttm_cash_flow.loc[:, columns_list]
-        cash_flow['nocf_to_operating_ni_ttm'] = np.where(
+        cash_flow['OptCFToNetIncomeTTM'] = np.where(
             CalcTools.is_zero(cash_flow.total_operating_revenue.values - cash_flow.total_operating_cost.values),
             0, cash_flow.net_operate_cash_flow.values / (
                     cash_flow.total_operating_revenue.values - cash_flow.total_operating_cost.values))
@@ -114,7 +114,7 @@ class FactorCashFlow(FactorBase):
     def oper_cash_in_to_current_liability_ttm(self, ttm_cash_flow, factor_cash_flow):
         columns_list = ['net_operate_cash_flow', 'total_current_liability']
         cash_flow = ttm_cash_flow.loc[:, columns_list]
-        cash_flow['oper_cash_in_to_current_liability_ttm'] = np.where(
+        cash_flow['OptCFToCurrLiabilityTTM'] = np.where(
             CalcTools.is_zero(cash_flow.total_current_liability.values), 0,
             cash_flow.net_operate_cash_flow.values / cash_flow.total_current_liability.values)
         cash_flow = cash_flow.drop(columns_list, axis=1)
@@ -125,7 +125,7 @@ class FactorCashFlow(FactorBase):
     def cash_to_current_liability_ttm(self, ttm_cash_flow, factor_cash_flow):
         columns_list = ['cash_and_equivalents_at_end', 'total_current_assets']
         cash_flow = ttm_cash_flow.loc[:, columns_list]
-        cash_flow['cash_to_current_liability_ttm'] = np.where(CalcTools.is_zero(cash_flow.total_current_assets.values),
+        cash_flow['CashRatioTTM'] = np.where(CalcTools.is_zero(cash_flow.total_current_assets.values),
                                                               0,
                                                               cash_flow.cash_and_equivalents_at_end.values / cash_flow.total_current_assets.values)
         cash_flow = cash_flow.drop(columns_list, axis=1)
@@ -137,7 +137,7 @@ class FactorCashFlow(FactorBase):
         columns_list = ['net_operate_cash_flow', 'longterm_loan', 'shortterm_loan', 'market_cap',
                         'cash_and_equivalents_at_end']
         cash_flow = ttm_cash_flow.loc[:, columns_list]
-        cash_flow['cfo_to_ev_ttm'] = np.where(CalcTools.is_zero(
+        cash_flow['OptToEnterpriseTTM'] = np.where(CalcTools.is_zero(
             cash_flow.longterm_loan.values + cash_flow.shortterm_loan.values + \
             cash_flow.market_cap.values - cash_flow.cash_and_equivalents_at_end.values), 0,
             cash_flow.net_operate_cash_flow.values / (cash_flow.longterm_loan.values + cash_flow.shortterm_loan.values + \
@@ -150,7 +150,7 @@ class FactorCashFlow(FactorBase):
     def acca_ttm(self, ttm_cash_flow, factor_cash_flow):
         columns_list = ['net_operate_cash_flow', 'net_profit', 'total_assets']
         cash_flow = ttm_cash_flow.loc[:, columns_list]
-        cash_flow['acca_ttm'] = np.where(CalcTools.is_zero(cash_flow.total_assets.values), 0,
+        cash_flow['OptOnReToAssetTTM'] = np.where(CalcTools.is_zero(cash_flow.total_assets.values), 0,
                                          (cash_flow.net_operate_cash_flow.values - cash_flow.net_profit.values) / (
                                              cash_flow.total_assets.values))
         cash_flow = cash_flow.drop(columns_list, axis=1)
@@ -161,7 +161,7 @@ class FactorCashFlow(FactorBase):
     def net_profit_cash_cover_ttm(self, ttm_cash_flow, factor_cash_flow):
         columns_list = ['net_operate_cash_flow', 'np_parent_company_owners']
         cash_flow = ttm_cash_flow.loc[:, columns_list]
-        cash_flow['net_profit_cash_cover_ttm'] = np.where(
+        cash_flow['NetProCashCoverTTM'] = np.where(
             CalcTools.is_zero(cash_flow.np_parent_company_owners.values), 0,
             cash_flow.net_operate_cash_flow.values / cash_flow.np_parent_company_owners.values)
         cash_flow = cash_flow.drop(columns_list, axis=1)
@@ -172,7 +172,7 @@ class FactorCashFlow(FactorBase):
     def oper_cash_in_to_asset_ttm(self, ttm_cash_flow, factor_cash_flow):
         columns_list = ['net_operate_cash_flow', 'total_assets']
         cash_flow = ttm_cash_flow.loc[:, columns_list]
-        cash_flow['oper_cash_in_to_asset_ttm'] = np.where(CalcTools.is_zero(cash_flow.total_assets.values),
+        cash_flow['OptToAssertTTM'] = np.where(CalcTools.is_zero(cash_flow.total_assets.values),
                                                           0,
                                                           cash_flow.net_operate_cash_flow.values / cash_flow.total_assets.values)
         cash_flow = cash_flow.drop(columns_list, axis=1)
@@ -183,7 +183,7 @@ class FactorCashFlow(FactorBase):
     def sales_service_cash_to_or_latest(self, tp_cash_flow, factor_cash_flow):
         columns_list = ['goods_sale_and_service_render_cash', 'operating_revenue']
         cash_flow = tp_cash_flow.loc[:, columns_list]
-        cash_flow['sales_service_cash_to_or_latest'] = np.where(CalcTools.is_zero(cash_flow.operating_revenue.values),
+        cash_flow['SalesServCashToOR'] = np.where(CalcTools.is_zero(cash_flow.operating_revenue.values),
                                                                 0,
                                                                 cash_flow.goods_sale_and_service_render_cash.values / cash_flow.operating_revenue.values)
         cash_flow = cash_flow.drop(columns_list, axis=1)
@@ -194,7 +194,7 @@ class FactorCashFlow(FactorBase):
     def cash_rate_of_sales_latest(self, tp_cash_flow, factor_cash_flow):
         columns_list = ['net_operate_cash_flow', 'operating_revenue']
         cash_flow = tp_cash_flow.loc[:, columns_list]
-        cash_flow['cash_rate_of_sales_latest'] = np.where(CalcTools.is_zero(cash_flow.operating_revenue.values),
+        cash_flow['CashOfSales'] = np.where(CalcTools.is_zero(cash_flow.operating_revenue.values),
                                                           0,
                                                           cash_flow.net_operate_cash_flow.values / cash_flow.operating_revenue.values)
         cash_flow = cash_flow.drop(columns_list, axis=1)
@@ -206,7 +206,7 @@ class FactorCashFlow(FactorBase):
         columns_list = ['net_operate_cash_flow', 'total_operating_revenue',
                         'total_operating_cost']
         cash_flow = tp_cash_flow.loc[:, columns_list]
-        cash_flow['nocf_to_operating_ni_latest'] = np.where(
+        cash_flow['NOCFToOpt'] = np.where(
             CalcTools.is_zero((cash_flow.total_operating_revenue.values - cash_flow.total_operating_cost.values)), 0,
             cash_flow.net_operate_cash_flow.values / (
                     cash_flow.total_operating_revenue.values - cash_flow.total_operating_cost.values))
