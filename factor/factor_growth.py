@@ -8,7 +8,6 @@
 @time: 2019-02-12 10:03
 """
 import json
-from datetime import datetime, timedelta
 from sklearn import linear_model
 from pandas.io.json import json_normalize
 
@@ -21,6 +20,9 @@ from ultron.cluster.invoke.cache_data import cache_data
 
 
 class Growth(FactorBase):
+    """
+    成长类因子
+    """
     def __init__(self, name):
         super(Growth, self).__init__(name)
 
@@ -692,20 +694,6 @@ def do_update(growth, growth_sets, start_date, end_date, count):
     for trade_date in trade_date_sets:
         calculate(trade_date, growth_sets, growth)
     print('----->')
-
-
-def run(args):
-    if args.end_date == 0:
-        end_date = int(datetime.now().date().strftime('%Y%m%d'))
-    else:
-        end_date = args.end_date
-    if args.rebuild:
-        processor_growth = Growth('factor_growth')
-        processor_growth.create_dest_tables()
-        do_update(args.start_date, end_date, args.count, args.growth_sets, processor_growth)
-    if args.update:
-        processor_growth = Growth('factor_growth')
-        do_update(args.start_date, end_date, args.count, args.growth_sets, processor_growth)
 
 
 @app.task()

@@ -340,7 +340,7 @@ def get_basic_scale_data(trade_date):
 if __name__ == '__main__':
     session1 = str('156099868869460811')
     session2 = str('156099868869460812')
-    session3 = str('156099868869460813')
+    # session3 = str('156099868869460813')
     # session = str(int(time.time() * 1000000 + datetime.now().microsecond))
     start_date = 20100101
     end_date = 20190101
@@ -349,14 +349,15 @@ if __name__ == '__main__':
     _trade_date = TradeDate()
     trade_date_sets = _trade_date.trade_date_sets_ago(start_date, end_date, count)
     if rebuild is True:
+        # growth
         growth = factor_growth.Growth('factor_growth')
         growth.create_dest_tables()
-
+        # historical value
         history_value = historical_value.HistoricalValue('factor_historical_value')
         history_value.create_dest_tables()
-
-        scale = factor_per_share_indicators.PerShareIndicators('factor_scale')
-        scale.create_dest_tables()
+        # scale
+        # scale = factor_per_share_indicators.PerShareIndicators('factor_scale')
+        # scale.create_dest_tables()
 
     for date_index in trade_date_sets:
         # factor_growth
@@ -380,13 +381,13 @@ if __name__ == '__main__':
         print('history_cal_time:{}'.format(time.time() - time1))
 
         # scale
-        valuation_sets, ttm_factor_sets, cash_flow_sets, income_sets, balance_sets = get_basic_scale_data(date_index)
-        valuation_sets = pd.merge(valuation_sets, income_sets, on='symbol')
-        valuation_sets = pd.merge(valuation_sets, ttm_factor_sets, on='symbol')
-        valuation_sets = pd.merge(valuation_sets, cash_flow_sets, on='symbol')
-        valuation_sets = pd.merge(valuation_sets, balance_sets, on='symbol')
-        cache_data.set_cache(session3, date_index, valuation_sets.to_json(orient='records'))
-        factor_per_share_indicators.factor_calculate(date_index=date_index,
-                                                     session=session3)
+        # valuation_sets, ttm_factor_sets, cash_flow_sets, income_sets, balance_sets = get_basic_scale_data(date_index)
+        # valuation_sets = pd.merge(valuation_sets, income_sets, on='symbol')
+        # valuation_sets = pd.merge(valuation_sets, ttm_factor_sets, on='symbol')
+        # valuation_sets = pd.merge(valuation_sets, cash_flow_sets, on='symbol')
+        # valuation_sets = pd.merge(valuation_sets, balance_sets, on='symbol')
+        # cache_data.set_cache(session3, date_index, valuation_sets.to_json(orient='records'))
+        # factor_per_share_indicators.factor_calculate(date_index=date_index,
+        #                                              session=session3)
 
         print('---------------------->')

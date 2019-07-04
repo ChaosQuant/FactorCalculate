@@ -29,6 +29,9 @@ from ultron.cluster.invoke.cache_data import cache_data
 
 
 class HistoricalValue(FactorBase):
+    """
+    价值类因子
+    """
 
     def __init__(self, name):
         super(HistoricalValue, self).__init__(name)
