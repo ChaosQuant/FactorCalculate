@@ -1,8 +1,6 @@
 import pdb
 import collections
-import json
 import time
-from pandas.io.json import json_normalize
 
 from datetime import datetime, timedelta
 from factor import factor_growth, historical_value, factor_per_share_indicators, factor_cash_flow, factor_contrarian, factor_earning
@@ -518,6 +516,7 @@ if __name__ == '__main__':
     _trade_date = TradeDate()
     trade_date_sets = _trade_date.trade_date_sets_ago(start_date, end_date, count)
     if rebuild is True:
+        # create database table
         # growth
         growth = factor_growth.Growth('factor_growth')
         growth.create_dest_tables()

@@ -22,6 +22,9 @@ from ultron.cluster.invoke.cache_data import cache_data
 
 
 class PerShareIndicators(FactorBase):
+    """
+    规模类
+    """
     def __init__(self, name):
         super(PerShareIndicators, self).__init__(name)
 
