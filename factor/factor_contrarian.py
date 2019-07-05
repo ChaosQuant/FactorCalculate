@@ -158,27 +158,27 @@ class FactorContrarian(FactorBase):
         return factor_contrarian
 
 
-def calculate(trade_date, constrain_sets, constrain):  # 计算对应因子
-    print(trade_date)
-    factor_contrarian = pd.DataFrame()
-    tp_contrarian = constrain_sets
-    factor_contrarian['symbol'] = tp_contrarian['symbol']
-    tp_contrarian.set_index('symbol', inplace=True)
-    factor_contrarian = constrain.inte_bear_debt_to_total_capital_latest(constrain_sets, factor_contrarian)
-    factor_contrarian = constrain.debts_asset_ratio_latest(constrain_sets, factor_contrarian)
-    factor_contrarian = constrain.debt_tangible_equity_ratio_latest(constrain_sets, factor_contrarian)
+def calculate(trade_date, total_constrain_data_dic, constrain):  # 计算对应因子
+    balance_sets = total_constrain_data_dic['balance_sets']
+    ttm_factors_sets = total_constrain_data_dic['ttm_factors_sets']
 
-    factor_contrarian = constrain.sales_cost_ratio_ttm(constrain_sets, factor_contrarian)
-    factor_contrarian = constrain.tax_ratio_ttm(constrain_sets, factor_contrarian)
-    factor_contrarian = constrain.financial_expense_rate_ttm(constrain_sets, factor_contrarian)
-    factor_contrarian = constrain.operating_expense_rate_ttm(constrain_sets, factor_contrarian)
-    factor_contrarian = constrain.admini_expense_rate_ttm(constrain_sets, factor_contrarian)
-    factor_contrarian = constrain.period_costs_rate_ttm(constrain_sets, factor_contrarian)
+    factor_contrarian = pd.DataFrame()
+    factor_contrarian['symbol'] = balance_sets.index
+    # 非TTM计算
+    factor_contrarian = constrain.inte_bear_debt_to_total_capital_latest(balance_sets, factor_contrarian)
+    factor_contrarian = constrain.debts_asset_ratio_latest(balance_sets, factor_contrarian)
+    factor_contrarian = constrain.debt_tangible_equity_ratio_latest(balance_sets, factor_contrarian)
+
+    # TTM计算
+    factor_contrarian = constrain.sales_cost_ratio_ttm(ttm_factors_sets, factor_contrarian)
+    factor_contrarian = constrain.tax_ratio_ttm(ttm_factors_sets, factor_contrarian)
+    factor_contrarian = constrain.financial_expense_rate_ttm(ttm_factors_sets, factor_contrarian)
+    factor_contrarian = constrain.operating_expense_rate_ttm(ttm_factors_sets, factor_contrarian)
+    factor_contrarian = constrain.admini_expense_rate_ttm(ttm_factors_sets, factor_contrarian)
+    factor_contrarian = constrain.period_costs_rate_ttm(ttm_factors_sets, factor_contrarian)
     factor_contrarian['id'] = factor_contrarian['symbol'] + str(trade_date)
     factor_contrarian['trade_date'] = str(trade_date)
     constrain._storage_data(factor_contrarian, trade_date)
-
-
 
 
 @app.task()
@@ -187,7 +187,13 @@ def factor_calculate(**kwargs):
     date_index = kwargs['date_index']
     session = kwargs['session']
     constrain = FactorContrarian('factor_constrain')  # 注意, 这里的name要与client中新建table时的name一致, 不然回报错
-    content = cache_data.get_cache(session, date_index)
-    total_constrain_data = json_normalize(json.loads(str(content, encoding='utf8')))
-    print("len_total_constrain_data {}".format(len(total_constrain_data)))
-    calculate(date_index, total_constrain_data, constrain)
+    content1 = cache_data.get_cache(session + '1', date_index)
+    content2 = cache_data.get_cache(session + '2', date_index)
+    balance_sets = json_normalize(json.loads(str(content1, encoding='utf8')))
+    ttm_factors_sets = json_normalize(json.loads(str(content2, encoding='utf8')))
+    balance_sets.set_index('symbol', inplace=True)
+    ttm_factors_sets.set_index('symbol', inplace=True)
+    print("len_constrain_data {}".format(len(balance_sets)))
+    print("len_ttm_constrain_data {}".format(len(ttm_factors_sets)))
+    total_constrain_data_dic = {'balance_sets': balance_sets, 'ttm_factors_sets': ttm_factors_sets}
+    calculate(date_index, total_constrain_data_dic, constrain)

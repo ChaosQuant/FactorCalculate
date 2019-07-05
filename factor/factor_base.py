@@ -9,21 +9,21 @@ from sqlalchemy.orm import sessionmaker
 
 sys.path.append('..')
 from factor.utillities.trade_date import TradeDate
-from factor import config
+from factor import factor_config
 
 
 class FactorBase(object):
     def __init__(self, name):
-        destination_db = '''mysql+mysqlconnector://{0}:{1}@{2}:{3}/{4}'''.format(config.destination_db_user,
-                                                                                 config.destination_db_pwd,
-                                                                                 config.destination_db_host,
-                                                                                 config.destination_db_port,
-                                                                                 config.destination_db_database)
+        destination_db = '''mysql+mysqlconnector://{0}:{1}@{2}:{3}/{4}'''.format(factor_config.destination_db_user,
+                                                                                 factor_config.destination_db_pwd,
+                                                                                 factor_config.destination_db_host,
+                                                                                 factor_config.destination_db_port,
+                                                                                 factor_config.destination_db_database)
         self._name = name
         self._destination = sa.create_engine(destination_db)
         self._dest_session = sessionmaker(bind=self._destination, autocommit=False, autoflush=True)
         self._trade_date = TradeDate()
-        self._dir = config.RECORD_BASE_DIR + 'factor/' + str(self._name)
+        self._dir = factor_config.RECORD_BASE_DIR + 'factor/' + str(self._name)
 
     def _create_index(self):
         session = self._dest_session()

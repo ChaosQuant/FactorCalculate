@@ -269,7 +269,7 @@ def factor_calculate(**kwargs):
     ttm_factor_sets = json_normalize(json.loads(str(content2, encoding='utf8')))
     tp_cash_flow.set_index('symbol', inplace=True)
     ttm_factor_sets.set_index('symbol', inplace=True)
+    print("len_tp_cash_flow_data {}".format(len(tp_cash_flow)))
+    print("len_ttm_cash_flow_data {}".format(len(ttm_factor_sets)))
     total_cash_flow_data = {'tp_cash_flow': tp_cash_flow, 'ttm_factor_sets': ttm_factor_sets}
-
-    print("len_total_cash_flow_data {}".format(len(total_cash_flow_data)))
     calculate(date_index, total_cash_flow_data, cash_flow)

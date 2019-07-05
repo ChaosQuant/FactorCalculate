@@ -8,13 +8,13 @@ from collections import OrderedDict
 import collections
 
 sys.path.append("../../")
-from factor import config
+from factor import factor_config
 
 
 class TradeDate(object):
 
     def __init__(self):
-        self._all_trade_file = config.RECORD_BASE_DIR + 'trade_date/' + 'trade_date.csv'
+        self._all_trade_file = factor_config.RECORD_BASE_DIR + 'trade_date/' + 'trade_date.csv'
         self._trade_date_sets = OrderedDict()
         self._load_trade_date()
 

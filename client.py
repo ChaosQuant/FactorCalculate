@@ -377,7 +377,6 @@ def get_basic_cash_flow(trade_date):
                    }
     ttm_factor_sets = get_ttm_fundamental([], ttm_factors, trade_date).reset_index()
     ttm_factor_sets = ttm_factor_sets[-ttm_factor_sets.duplicated()]
-
     # 合并
     ttm_factor_sets = pd.merge(ttm_factor_sets, valuation_sets, on="symbol")
 
@@ -409,7 +408,7 @@ def get_basic_constrain(trade_date):
                                    Income.administration_expense
                                    ]}
 
-    ttm_factors_sets = get_ttm_fundamental([], ttm_factors, trade_date)
+    ttm_factors_sets = get_ttm_fundamental([], ttm_factors, trade_date).reset_index()
     ttm_factors_sets = ttm_factors_sets[-ttm_factors_sets.duplicated()]
 
     return balance_sets, ttm_factors_sets
@@ -525,7 +524,7 @@ if __name__ == '__main__':
         history_value = historical_value.HistoricalValue('factor_historical_value')
         history_value.create_dest_tables()
 
-        # per shapre
+        # per share indicator
         per_share = factor_per_share_indicators.PerShareIndicators('factor_per_share')
         per_share.create_dest_tables()
 
@@ -582,8 +581,8 @@ if __name__ == '__main__':
 
         # constrain
         balance_sets, ttm_factors_sets = get_basic_constrain(date_index)
-        constrain_sets = pd.merge(balance_sets, ttm_factors_sets, on='symbol')
-        cache_data.set_cache(session5, date_index, constrain_sets.to_json(orient='records'))
+        cache_data.set_cache(session5 + '1', date_index, balance_sets.to_json(orient='records'))
+        cache_data.set_cache(session5 + '2', date_index, ttm_factors_sets.to_json(orient='records'))
         factor_contrarian.factor_calculate(date_index=date_index, session=session5)
         time5 = time.time()
         print('constrain_cal_time:{}'.format(time5 - time4))

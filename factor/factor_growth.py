@@ -687,15 +687,6 @@ def calculate(trade_date, growth_sets, growth):
     growth._storage_data(factor_historical_growth, trade_date)
 
 
-def do_update(growth, growth_sets, start_date, end_date, count):
-    # 读取本地交易日
-    _trade_date = td.TradeDate()
-    trade_date_sets = _trade_date.trade_date_sets_ago(start_date, end_date, count)
-    for trade_date in trade_date_sets:
-        calculate(trade_date, growth_sets, growth)
-    print('----->')
-
-
 @app.task()
 def factor_calculate(**kwargs):
     print("growth_kwargs: {}".format(kwargs))

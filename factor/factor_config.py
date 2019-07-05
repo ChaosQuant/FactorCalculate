@@ -11,7 +11,7 @@ source_db_pwd = 'read'
 
 destination_db_host = '10.15.97.128'
 destination_db_port = '3306'
-destination_db_database = 'vision'
+destination_db_database = 'test'
 destination_db_user = 'root'
 destination_db_pwd = '1234'
 
