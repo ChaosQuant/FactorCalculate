@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-@version: ??
+@version: 0.1
 @author: li
 @file: factor_growth.py
 @time: 2019-02-12 10:03

@@ -3,7 +3,7 @@
 
 """
 每股指标
-@version: ??
+@version: 0.1
 @author: li
 @file: factor_per_share_indicators.py
 @time: 2019-02-12 10:02
@@ -22,7 +22,8 @@ from ultron.cluster.invoke.cache_data import cache_data
 
 class PerShareIndicators(FactorBase):
     """
-    规模类
+    收益质量
+        --每股指标
     """
     def __init__(self, name):
         super(PerShareIndicators, self).__init__(name)

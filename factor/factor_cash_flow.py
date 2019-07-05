@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 # coding=utf-8
 
-import numpy as np
 
 import json
 from factor import app
+import numpy as np
 from pandas.io.json import json_normalize
-
 from factor.ttm_fundamental import *
 from factor.factor_base import FactorBase
 from vision.fm.signletion_engine import *
@@ -15,6 +14,10 @@ from ultron.cluster.invoke.cache_data import cache_data
 
 
 class FactorCashFlow(FactorBase):
+    """
+    收益质量
+        --现金流
+    """
     def __init__(self, name):
         super(FactorCashFlow, self).__init__(name)
 

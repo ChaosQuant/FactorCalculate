@@ -7,28 +7,16 @@
 @file: factor_management.py
 @time: 2019-05-31
 """
-import pdb
-import argparse
-import time
-from datetime import datetime, timedelta
-import collections
 import sys
-import numpy as np
-import pandas as pd
-
 sys.path.append('..')
+import json
+from factor import app
+import numpy as np
 from factor.ttm_fundamental import *
 from factor.factor_base import FactorBase
 from vision.fm.signletion_engine import *
-from vision.file_unit.cash_flow import CashFlow
-from vision.file_unit.income import Income
-from vision.file_unit.balance import Balance
-from vision.file_unit.valuation import Valuation
-from vision.file_unit.indicator import Indicator
 from vision.utillities.calc_tools import CalcTools
-import json
 from pandas.io.json import json_normalize
-from factor import app
 from ultron.cluster.invoke.cache_data import cache_data
 
 

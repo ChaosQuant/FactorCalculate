@@ -1,18 +1,12 @@
 #!/usr/bin/env python
 # coding=utf-8
 
-import pdb
 import sys
-import numpy as np
-import pandas as pd
-import argparse
-from datetime import datetime
-
 sys.path.append("..")
+import numpy as np
 import json
 from pandas.io.json import json_normalize
 from factor import app
-
 from factor.factor_base import FactorBase
 from factor.ttm_fundamental import *
 from vision.fm.signletion_engine import *
