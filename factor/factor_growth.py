@@ -60,27 +60,31 @@ class Growth(FactorBase):
                     )ENGINE=InnoDB DEFAULT CHARSET=utf8;""".format(self._name)
         super(Growth, self)._create_tables(create_sql, drop_sql)
 
-    def historical_net_asset_grow_rate(self, tp_historical_growth):
+    @staticmethod
+    def historical_net_asset_grow_rate(tp_historical_growth):
         """
         净资产增长率
         :param tp_historical_growth:
-        :param factor_historical_growth:
         :return:
         """
         columns_lists = ['symbol', 'total_owner_equities', 'total_owner_equities_pre_year']
         historical_growth = tp_historical_growth.loc[:, columns_lists]
+
         if len(historical_growth) <= 0:
             return
+
         fun = lambda x: ((x[0] / x[1]) - 1.0 if x[1] and x[1] != 0 and x[0] is not None and x[1] is not None else None)
 
         historical_growth['NetAsset1YChg'] = historical_growth[['total_owner_equities',
-                                                                                        'total_owner_equities_pre_year']].apply(fun, axis=1)
+                                                                'total_owner_equities_pre_year']].apply(fun, axis=1)
 
-        historical_growth = historical_growth.drop(columns=['total_owner_equities', 'total_owner_equities_pre_year'], axis=1)
+        historical_growth = historical_growth.drop(columns=['total_owner_equities',
+                                                            'total_owner_equities_pre_year'], axis=1)
         # factor_historical_growth = pd.merge(factor_historical_growth, historical_growth, on='symbol')
         return historical_growth
 
-    def historical_total_asset_grow_rate(self, tp_historical_growth, factor_historical_growth):
+    @staticmethod
+    def historical_total_asset_grow_rate(tp_historical_growth, factor_historical_growth):
         """
         总资产增长率
         :param tp_historical_growth:
@@ -99,7 +103,8 @@ class Growth(FactorBase):
         factor_historical_growth = pd.merge(factor_historical_growth, historical_growth, on='symbol')
         return factor_historical_growth
 
-    def historical_operating_revenue_grow_rate(self, tp_historical_growth, factor_historical_growth):
+    @staticmethod
+    def historical_operating_revenue_grow_rate(tp_historical_growth, factor_historical_growth):
         """
         营业收入增长率
         :param tp_historical_growth:
@@ -118,7 +123,8 @@ class Growth(FactorBase):
         factor_historical_growth = pd.merge(factor_historical_growth, historical_growth, on='symbol')
         return factor_historical_growth
 
-    def historical_operating_profit_grow_rate(self, tp_historical_growth, factor_historical_growth):
+    @staticmethod
+    def historical_operating_profit_grow_rate(tp_historical_growth, factor_historical_growth):
         """
         营业利润增长率
         :param tp_historical_growth:
@@ -137,7 +143,8 @@ class Growth(FactorBase):
         factor_historical_growth = pd.merge(factor_historical_growth, historical_growth, on='symbol')
         return factor_historical_growth
 
-    def historical_total_profit_grow_rate(self, tp_historical_growth, factor_historical_growth):
+    @staticmethod
+    def historical_total_profit_grow_rate(tp_historical_growth, factor_historical_growth):
         """
         利润总额增长率
         :param tp_historical_growth:
@@ -156,7 +163,8 @@ class Growth(FactorBase):
         factor_historical_growth = pd.merge(factor_historical_growth, historical_growth, on='symbol')
         return factor_historical_growth
 
-    def historical_net_profit_grow_rate(self, tp_historical_growth, factor_historical_growth):
+    @staticmethod
+    def historical_net_profit_grow_rate(tp_historical_growth, factor_historical_growth):
         """
         净利润增长率
         :param tp_historical_growth:
@@ -175,7 +183,8 @@ class Growth(FactorBase):
         factor_historical_growth = pd.merge(factor_historical_growth, historical_growth, on='symbol')
         return factor_historical_growth
 
-    def historical_np_parent_company_grow_rate(self, tp_historical_growth, factor_historical_growth):
+    @staticmethod
+    def historical_np_parent_company_grow_rate(tp_historical_growth, factor_historical_growth):
         """
         归属母公司股东的净利润增长率
         :param tp_historical_growth:
@@ -195,7 +204,8 @@ class Growth(FactorBase):
         factor_historical_growth = pd.merge(factor_historical_growth, historical_growth, on='symbol')
         return factor_historical_growth
 
-    def historical_net_profit_grow_rate_3y(self, tp_historical_growth, factor_historical_growth):
+    @staticmethod
+    def historical_net_profit_grow_rate_3y(tp_historical_growth, factor_historical_growth):
         """
         净利润3年复合增长率
         :param tp_historical_growth:
@@ -214,7 +224,8 @@ class Growth(FactorBase):
         factor_historical_growth = pd.merge(factor_historical_growth, historical_growth, on='symbol')
         return factor_historical_growth
 
-    def historical_net_profit_grow_rate_5y(self, tp_historical_growth, factor_historical_growth):
+    @staticmethod
+    def historical_net_profit_grow_rate_5y(tp_historical_growth, factor_historical_growth):
         """
         净利润5年复合增长率
         :param tp_historical_growth:
@@ -233,7 +244,8 @@ class Growth(FactorBase):
         factor_historical_growth = pd.merge(factor_historical_growth, historical_growth, on='symbol')
         return factor_historical_growth
 
-    def historical_operating_revenue_grow_rate_3y(self, tp_historical_growth, factor_historical_growth):
+    @staticmethod
+    def historical_operating_revenue_grow_rate_3y(tp_historical_growth, factor_historical_growth):
         """
         营业收入3年复合增长率
         :param tp_historical_growth:
@@ -254,7 +266,8 @@ class Growth(FactorBase):
         factor_historical_growth = pd.merge(factor_historical_growth, historical_growth, on='symbol')
         return factor_historical_growth
 
-    def historical_operating_revenue_grow_rate_5y(self, tp_historical_growth, factor_historical_growth):
+    @staticmethod
+    def historical_operating_revenue_grow_rate_5y(tp_historical_growth, factor_historical_growth):
         """
         营业收入5年复合增长率
         :param tp_historical_growth:
@@ -275,7 +288,8 @@ class Growth(FactorBase):
         factor_historical_growth = pd.merge(factor_historical_growth, historical_growth, on='symbol')
         return factor_historical_growth
 
-    def historical_net_cash_flow_grow_rate(self, tp_historical_growth, factor_historical_growth):
+    @staticmethod
+    def historical_net_cash_flow_grow_rate(tp_historical_growth, factor_historical_growth):
         """
         缺数据
         净现金流量增长率
@@ -295,7 +309,8 @@ class Growth(FactorBase):
         factor_historical_growth = pd.merge(factor_historical_growth, historical_growth, on='symbol')
         return factor_historical_growth
 
-    def historical_np_parent_company_cut_yoy(self, tp_historical_growth, factor_historical_growth):
+    @staticmethod
+    def historical_np_parent_company_cut_yoy(tp_historical_growth, factor_historical_growth):
         """
         缺失数据
         归属母公司股东的净利润（扣除）同比增长
@@ -315,27 +330,8 @@ class Growth(FactorBase):
         factor_historical_growth = pd.merge(factor_historical_growth, historical_growth, on='symbol')
         return factor_historical_growth
 
-    def historical_egro_(self, tp_historical_growth, factor_historical_growth):
-        """
-        5年收益增长率
-        :param tp_historical_growth:
-        :param factor_historical_growth:
-        :return:
-        """
-        if len(tp_historical_growth) < 3:
-            return
-        columns_lists = ['symbol', 'net_profit', 'net_profit_pre_year_1', 'net_profit_pre_year_2',
-                         'net_profit_pre_year_3', 'net_profit_pre_year_4']
-        regr = linear_model.LinearRegression()
-        # 读取五年的时间和净利润
-        historical_growth = tp_historical_growth.loc[:, columns_lists]
-
-        regr.fit(tp_historical_growth['x'].values.reshape(-1, 1), tp_historical_growth['y'].values)
-
-        weight = regr.coef_
-        mean = tp_historical_growth['y'].mean()
-
-    def historical_egro(self, tp_historical_growth, factor_historical_growth):
+    @staticmethod
+    def historical_egro(tp_historical_growth, factor_historical_growth):
         columns_lists = ['symbol', 'net_profit', 'net_profit_pre_year_1', 'net_profit_pre_year_2',
                          'net_profit_pre_year_3', 'net_profit_pre_year_4']
         regr = linear_model.LinearRegression()
@@ -368,11 +364,9 @@ class Growth(FactorBase):
         #                                             range(0, 5)) else None)
 
         historical_growth['coefficient'] = historical_growth.apply(fun2, axis=1)
-
         historical_growth['mean'] = historical_growth[['net_profit', 'net_profit_pre_year_1', 'net_profit_pre_year_2', 'net_profit_pre_year_3', 'net_profit_pre_year_4']].fillna('nan').mean(axis=1)
 
         fun1 = lambda x: x[0] / abs(x[1]) if x[1] != 0 and x[1] is not None and x[0] is not None else None
-
         historical_growth['NetPft5YAvgChgTTM'] = historical_growth[['coefficient', 'mean']].apply(fun1, axis=1)
 
         # historical_growth = historical_growth.drop(
@@ -384,7 +378,8 @@ class Growth(FactorBase):
 
         return factor_historical_growth
 
-    def historical_sue(self, tp_historical_growth, factor_historical_growth):
+    @staticmethod
+    def historical_sue(tp_historical_growth, factor_historical_growth):
         """
         未预期盈余
         :param tp_historical_growth:
@@ -396,8 +391,10 @@ class Growth(FactorBase):
         historical_growth = tp_historical_growth.loc[:, columns_lists]
         if len(historical_growth) <= 0:
             return
-        historical_growth['mean'] = historical_growth[['net_profit', 'net_profit_pre_year_1', 'net_profit_pre_year_2', 'net_profit_pre_year_3', 'net_profit_pre_year_4']].fillna(0.0).mean(axis=1)
-        historical_growth['std'] = historical_growth[['net_profit', 'net_profit_pre_year_1', 'net_profit_pre_year_2', 'net_profit_pre_year_3', 'net_profit_pre_year_4']].fillna(0.0).std(axis=1)
+        historical_growth['mean'] = historical_growth[['net_profit', 'net_profit_pre_year_1', 'net_profit_pre_year_2',
+                                                       'net_profit_pre_year_3', 'net_profit_pre_year_4']].fillna(0.0).mean(axis=1)
+        historical_growth['std'] = historical_growth[['net_profit', 'net_profit_pre_year_1', 'net_profit_pre_year_2',
+                                                      'net_profit_pre_year_3', 'net_profit_pre_year_4']].fillna(0.0).std(axis=1)
 
         fun = lambda x: (x[0] - x[1]) / x[2] if x[2] !=0 and x[1] is not None and x[0] is not None and x[2] is not None else None
 
@@ -409,7 +406,8 @@ class Growth(FactorBase):
 
         return factor_historical_growth
 
-    def historical_suoi(self, tp_historical_growth, factor_historical_growth):
+    @staticmethod
+    def historical_suoi(tp_historical_growth, factor_historical_growth):
         """
         未预期毛利
         :param tp_historical_growth:
@@ -438,21 +436,15 @@ class Growth(FactorBase):
         historical_growth['std'] = historical_growth[['gi_2', 'gi_3', 'gi_4', 'gi_5']].std(axis=1)
 
         fun = lambda x: ((x[0] - x[1]) / x[2] if x[2] != 0 and x[1] is not None and x[0] is not None and x[2] is not None else None)
-
-        # historical_growth['StdUxpGrPft1YTTM'] = (historical_growth['gi_1'] - historical_growth['mean']) / historical_growth['std']
         historical_growth['StdUxpGrPft1YTTM'] = historical_growth[['gi_1', 'mean', 'std']].apply(fun, axis=1)
 
-        # historical_growth = historical_growth.drop(columns=['operating_revenue', 'operating_revenue_pre_year_1', 'operating_revenue_pre_year_2',
-        #                                                     'operating_revenue_pre_year_3', 'operating_revenue_pre_year_4',
-        #                                                     'operating_cost', 'operating_cost_pre_year_1', 'operating_cost_pre_year_2',
-        #                                                     'operating_cost_pre_year_3', 'operating_cost_pre_year_4', 'std', 'mean',
-        #                                                     'gi_1', 'gi_2', 'gi_3', 'gi_4', 'gi_5'], axis=1)
         historical_growth = historical_growth[['symbol', 'StdUxpGrPft1YTTM']]
         factor_historical_growth = pd.merge(factor_historical_growth, historical_growth, on='symbol')
 
         return factor_historical_growth
 
-    def historical_financing_cash_grow_rate(self, tp_historical_growth, factor_historical_growth):
+    @staticmethod
+    def historical_financing_cash_grow_rate(tp_historical_growth, factor_historical_growth):
         """
         筹资活动产生的现金流量净额增长率
         :param tp_historical_growth:
@@ -472,7 +464,8 @@ class Growth(FactorBase):
         factor_historical_growth = pd.merge(factor_historical_growth, historical_growth, on='symbol')
         return factor_historical_growth
 
-    def historical_oper_cash_grow_rate(self, tp_historical_growth, factor_historical_growth):
+    @staticmethod
+    def historical_oper_cash_grow_rate(tp_historical_growth, factor_historical_growth):
         """
         经营活动产生的现金流量净额
         :param tp_historical_growth:
@@ -492,7 +485,8 @@ class Growth(FactorBase):
         factor_historical_growth = pd.merge(factor_historical_growth, historical_growth, on='symbol')
         return factor_historical_growth
 
-    def historical_invest_cash_grow_rate(self, tp_historical_growth, factor_historical_growth):
+    @staticmethod
+    def historical_invest_cash_grow_rate(tp_historical_growth, factor_historical_growth):
         """
         投资活动产生的现金流量净额
         :param tp_historical_growth:
@@ -512,7 +506,8 @@ class Growth(FactorBase):
         factor_historical_growth = pd.merge(factor_historical_growth, historical_growth, on='symbol')
         return factor_historical_growth
 
-    def historical_sgro(self, tp_historical_growth, factor_historical_growth):
+    @staticmethod
+    def historical_sgro(tp_historical_growth, factor_historical_growth):
         """
         五年营业收入增长率
         :param tp_historical_growth:
@@ -539,19 +534,18 @@ class Growth(FactorBase):
                 return False
 
         def fun2(x):
-            aa = x[['operating_revenue', 'operating_revenue_pre_year_1', 'operating_revenue_pre_year_2', 'operating_revenue_pre_year_3', 'operating_revenue_pre_year_4']].fillna('nan').values.reshape(-1, 1)
+            aa = x[['operating_revenue', 'operating_revenue_pre_year_1', 'operating_revenue_pre_year_2',
+                    'operating_revenue_pre_year_3', 'operating_revenue_pre_year_4']].fillna('nan').values.reshape(-1, 1)
             if has_non(aa):
                 return None
             else:
                 regr.fit(aa, range(0, 5))
                 return regr.coef_[-1]
 
-        # fun = lambda x: (regr.coef_[-1] if regr.fit(x[['operating_revenue', 'operating_revenue_pre_year_1',
-        #                                                'operating_revenue_pre_year_2', 'operating_revenue_pre_year_3',
-        #                                                'operating_revenue_pre_year_4']].values.reshape(-1, 1),
-        #                                             range(0, 5)) else None)
         historical_growth['coefficient'] = historical_growth.apply(fun2, axis=1)
-        historical_growth['mean'] = historical_growth[['operating_revenue', 'operating_revenue_pre_year_1', 'operating_revenue_pre_year_2', 'operating_revenue_pre_year_3', 'operating_revenue_pre_year_4']].fillna(0.0).mean(axis=1)
+        historical_growth['mean'] = historical_growth[['operating_revenue', 'operating_revenue_pre_year_1',
+                                                       'operating_revenue_pre_year_2', 'operating_revenue_pre_year_3',
+                                                       'operating_revenue_pre_year_4']].fillna(0.0).mean(axis=1)
 
         fun1 = lambda x: x[0] / abs(x[1]) if x[1] is not None and x[0] is not None and x[1] != 0 else None
         historical_growth['Sales5YChgTTM'] = historical_growth[['coefficient', 'mean']].apply(fun1, axis=1)
@@ -564,7 +558,8 @@ class Growth(FactorBase):
         return factor_historical_growth
 
     # 分析师预期增长
-    def fsalesg(self, tp_historical_growth, factor_historical_growth):
+    @staticmethod
+    def fsalesg(tp_historical_growth, factor_historical_growth):
         """
         未来预期营收增长
         :param tp_historical_growth:
@@ -583,7 +578,8 @@ class Growth(FactorBase):
         factor_historical_growth = pd.merge(factor_historical_growth, historical_growth, on='symbol')
         return factor_historical_growth
 
-    def fearng(self, tp_historical_growth, factor_historical_growth):
+    @staticmethod
+    def fearng(tp_historical_growth, factor_historical_growth):
         """
         未来预期盈利增长
         :param tp_historical_growth:
@@ -602,7 +598,8 @@ class Growth(FactorBase):
         factor_historical_growth = pd.merge(factor_historical_growth, historical_growth, on='symbol')
         return factor_historical_growth
 
-    def egibs_long(self, tp_historical_growth, factor_historical_growth):
+    @staticmethod
+    def egibs_long(tp_historical_growth, factor_historical_growth):
         """
         净利润增长率
         :param tp_historical_growth:
@@ -633,7 +630,6 @@ def calculate(trade_date, growth_sets, growth):
         print("%s has no data" % trade_date)
         return
 
-    # psindu
     factor_historical_growth = growth.historical_net_asset_grow_rate(growth_sets)
     factor_historical_growth = growth.historical_total_asset_grow_rate(growth_sets, factor_historical_growth)
     factor_historical_growth = growth.historical_operating_revenue_grow_rate(growth_sets, factor_historical_growth)

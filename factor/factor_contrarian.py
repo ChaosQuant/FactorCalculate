@@ -45,7 +45,8 @@ class FactorContrarian(FactorBase):
         super(FactorContrarian, self)._create_tables(create_sql, drop_sql)
 
     # 销售成本率=营业成本(TTM)/营业收入(TTM)
-    def sales_cost_ratio_ttm(self, tp_contrarian, factor_contrarian):
+    @staticmethod
+    def sales_cost_ratio_ttm(tp_contrarian, factor_contrarian):
         columns_list = ['operating_cost', 'operating_revenue']
         contrarian = tp_contrarian.loc[:, columns_list]
         contrarian['SalesCostTTM'] = np.where(
@@ -57,7 +58,8 @@ class FactorContrarian(FactorBase):
         return factor_contrarian
 
     # 销售税金率=营业税金及附加(TTM)/营业收入(TTM)
-    def tax_ratio_ttm(self, tp_contrarian, factor_contrarian):
+    @staticmethod
+    def tax_ratio_ttm(tp_contrarian, factor_contrarian):
         columns_list = ['operating_tax_surcharges', 'operating_revenue']
         contrarian = tp_contrarian.loc[:, columns_list]
         contrarian['TaxRTTM'] = np.where(
@@ -69,7 +71,8 @@ class FactorContrarian(FactorBase):
         return factor_contrarian
 
     # 财务费用与营业总收入之比=财务费用(TTM)/营业总收入(TTM)
-    def financial_expense_rate_ttm(self, tp_contrarian, factor_contrarian):
+    @staticmethod
+    def financial_expense_rate_ttm(tp_contrarian, factor_contrarian):
         columns_list = ['financial_expense', 'total_operating_cost']
         contrarian = tp_contrarian.loc[:, columns_list]
         contrarian['FinExpTTM'] = np.where(
@@ -81,7 +84,8 @@ class FactorContrarian(FactorBase):
         return factor_contrarian
 
     # 营业费用与营业总收入之比=销售费用(TTM)/营业总收入(TTM)
-    def operating_expense_rate_ttm(self, tp_contrarian, factor_contrarian):
+    @staticmethod
+    def operating_expense_rate_ttm(tp_contrarian, factor_contrarian):
         columns_list = ['sale_expense', 'total_operating_cost', 'total_operating_revenue']
         contrarian = tp_contrarian.loc[:, columns_list]
         contrarian['OperExpTTM'] = np.where(
@@ -93,7 +97,8 @@ class FactorContrarian(FactorBase):
         return factor_contrarian
 
     # 管理费用与营业总收入之比=管理费用/营业总收入
-    def admini_expense_rate_ttm(self, tp_contrarian, factor_contrarian):
+    @staticmethod
+    def admini_expense_rate_ttm(tp_contrarian, factor_contrarian):
         columns_list = ['administration_expense', 'total_operating_revenue']
         contrarian = tp_contrarian.loc[:, columns_list]
         contrarian['AdminExpTTM'] = np.where(
@@ -105,7 +110,8 @@ class FactorContrarian(FactorBase):
         return factor_contrarian
 
     # 销售期间费用率 = (财务费用 + 销售费用 + 管理费用) / (营业收入)
-    def period_costs_rate_ttm(self, tp_contrarian, factor_contrarian):
+    @staticmethod
+    def period_costs_rate_ttm(tp_contrarian, factor_contrarian):
         columns_list = ['financial_expense', 'sale_expense', 'administration_expense', 'operating_revenue']
         contrarian = tp_contrarian.loc[:, columns_list]
         contrarian['PeridCostTTM'] = np.where(
@@ -118,7 +124,8 @@ class FactorContrarian(FactorBase):
         return factor_contrarian
 
     # 负债合计/有形资产(流动资产+固定资产)
-    def debt_tangible_equity_ratio_latest(self, tp_contrarian, factor_contrarian):
+    @staticmethod
+    def debt_tangible_equity_ratio_latest(tp_contrarian, factor_contrarian):
         columns_list = ['total_liability', 'total_current_liability', 'fixed_assets']
         contrarian = tp_contrarian.loc[:, columns_list]
         contrarian['DTE'] = np.where(
@@ -130,7 +137,8 @@ class FactorContrarian(FactorBase):
         return factor_contrarian
 
     # 债务总资产比=负债合计/资产合计
-    def debts_asset_ratio_latest(self, tp_contrarian, factor_contrarian):
+    @staticmethod
+    def debts_asset_ratio_latest(tp_contrarian, factor_contrarian):
         columns_list = ['total_liability', 'total_assets']
         contrarian = tp_contrarian.loc[:, columns_list]
         contrarian['DA'] = np.where(
@@ -142,7 +150,8 @@ class FactorContrarian(FactorBase):
 
     # InteBearDebtToTotalCapital = 有息负债/总资本   总资本=固定资产+净运营资本  净运营资本=流动资产-流动负债
     # InteBearDebtToTotalCapital = 有息负债/(固定资产 + 流动资产 - 流动负债)
-    def inte_bear_debt_to_total_capital_latest(self, tp_contrarian, factor_contrarian):
+    @staticmethod
+    def inte_bear_debt_to_total_capital_latest(tp_contrarian, factor_contrarian):
         columns_list = ['interest_bearing_liability', 'fixed_assets', 'total_current_assets',
                         'total_current_liability']
         contrarian = tp_contrarian.loc[:, columns_list]

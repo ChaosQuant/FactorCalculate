@@ -45,7 +45,8 @@ class FactorCashFlow(FactorBase):
         super(FactorCashFlow, self)._create_tables(create_sql, drop_sql)
 
     # 经营活动净现金流（TTM）/负债（TTM）
-    def nocf_to_t_liability_ttm(self, ttm_cash_flow, factor_cash_flow):
+    @staticmethod
+    def nocf_to_t_liability_ttm(ttm_cash_flow, factor_cash_flow):
         columns_list = ['net_operate_cash_flow', 'total_liability']
         cash_flow = ttm_cash_flow.loc[:, columns_list]
         cash_flow['OptCFToLiabilityTTM'] = np.where(
@@ -56,7 +57,8 @@ class FactorCashFlow(FactorBase):
         return factor_cash_flow
 
     # 经营活动净现金流（TTM）/带息负债（TTM）
-    def nocf_to_interest_bear_debt_ttm(self, ttm_cash_flow, factor_cash_flow):
+    @staticmethod
+    def nocf_to_interest_bear_debt_ttm(ttm_cash_flow, factor_cash_flow):
         columns_list = ['net_operate_cash_flow', 'total_liability', 'interest_bearing_liability']
         cash_flow = ttm_cash_flow.loc[:, columns_list]
         cash_flow['OptCFToIBDTTM'] = np.where(
@@ -67,7 +69,8 @@ class FactorCashFlow(FactorBase):
         return factor_cash_flow
 
     # 经营活动净现金流（TTM）/净负债（TTM）
-    def nocf_to_net_debt_ttm(self, ttm_cash_flow, factor_cash_flow):
+    @staticmethod
+    def nocf_to_net_debt_ttm(ttm_cash_flow, factor_cash_flow):
         columns_list = ['net_operate_cash_flow', 'net_liability']
         cash_flow = ttm_cash_flow.loc[:, columns_list]
         cash_flow['OptCFToNetDebtTTM'] = np.where(CalcTools.is_zero(cash_flow.net_liability.values), 0,
@@ -77,7 +80,8 @@ class FactorCashFlow(FactorBase):
         return factor_cash_flow
 
     # 销售商品和提供劳务收到的现金（TTM）/营业收入（TTM）
-    def sale_service_cash_to_or_ttm(self, ttm_cash_flow, factor_cash_flow):
+    @staticmethod
+    def sale_service_cash_to_or_ttm(ttm_cash_flow, factor_cash_flow):
         columns_list = ['goods_sale_and_service_render_cash', 'operating_revenue']
         cash_flow = ttm_cash_flow.loc[:, columns_list]
         cash_flow['SaleServCashToOptReTTM'] = np.where(
@@ -88,7 +92,8 @@ class FactorCashFlow(FactorBase):
         return factor_cash_flow
 
     # 经营活动产生的现金流量净额（TTM）/营业收入（TTM）
-    def cash_rate_of_sales_ttm(self, ttm_cash_flow, factor_cash_flow):
+    @staticmethod
+    def cash_rate_of_sales_ttm(ttm_cash_flow, factor_cash_flow):
         columns_list = ['net_operate_cash_flow', 'operating_revenue']
         cash_flow = ttm_cash_flow.loc[:, columns_list]
         cash_flow['OptCFToRevTTM'] = np.where(
@@ -99,7 +104,8 @@ class FactorCashFlow(FactorBase):
         return factor_cash_flow
 
     # 经营活动产生的现金流量净额（TTM）/(营业总收入（TTM）-营业总成本（TTM）)
-    def nocf_to_operating_ni_ttm(self, ttm_cash_flow, factor_cash_flow):
+    @staticmethod
+    def nocf_to_operating_ni_ttm(ttm_cash_flow, factor_cash_flow):
         columns_list = ['net_operate_cash_flow', 'total_operating_revenue', 'total_operating_cost']
         cash_flow = ttm_cash_flow.loc[:, columns_list]
         cash_flow['OptCFToNetIncomeTTM'] = np.where(
@@ -111,7 +117,8 @@ class FactorCashFlow(FactorBase):
         return factor_cash_flow
 
     # 经营活动产生的现金流量净额（TTM）/流动负债（TTM）
-    def oper_cash_in_to_current_liability_ttm(self, ttm_cash_flow, factor_cash_flow):
+    @staticmethod
+    def oper_cash_in_to_current_liability_ttm(ttm_cash_flow, factor_cash_flow):
         columns_list = ['net_operate_cash_flow', 'total_current_liability']
         cash_flow = ttm_cash_flow.loc[:, columns_list]
         cash_flow['OptCFToCurrLiabilityTTM'] = np.where(
@@ -122,7 +129,8 @@ class FactorCashFlow(FactorBase):
         return factor_cash_flow
 
     # 期末现金及现金等价物余额（TTM）/流动负债（TTM）
-    def cash_to_current_liability_ttm(self, ttm_cash_flow, factor_cash_flow):
+    @staticmethod
+    def cash_to_current_liability_ttm(ttm_cash_flow, factor_cash_flow):
         columns_list = ['cash_and_equivalents_at_end', 'total_current_assets']
         cash_flow = ttm_cash_flow.loc[:, columns_list]
         cash_flow['CashRatioTTM'] = np.where(CalcTools.is_zero(cash_flow.total_current_assets.values),
@@ -133,7 +141,8 @@ class FactorCashFlow(FactorBase):
         return factor_cash_flow
 
     # 经营活动产生的现金流量净额（TTM）/（长期借款（TTM）+ 短期借款（TTM）+ 总市值 - 期末现金及现金等价物（TTM）
-    def cfo_to_ev_ttm(self, ttm_cash_flow, factor_cash_flow):
+    @staticmethod
+    def cfo_to_ev_ttm(ttm_cash_flow, factor_cash_flow):
         columns_list = ['net_operate_cash_flow', 'longterm_loan', 'shortterm_loan', 'market_cap',
                         'cash_and_equivalents_at_end']
         cash_flow = ttm_cash_flow.loc[:, columns_list]
@@ -147,7 +156,8 @@ class FactorCashFlow(FactorBase):
         return factor_cash_flow
 
     # （经营活动产生的金流量净额（TTM） - 净利润（TTM）） /总资产（TTM）
-    def acca_ttm(self, ttm_cash_flow, factor_cash_flow):
+    @staticmethod
+    def acca_ttm(ttm_cash_flow, factor_cash_flow):
         columns_list = ['net_operate_cash_flow', 'net_profit', 'total_assets']
         cash_flow = ttm_cash_flow.loc[:, columns_list]
         cash_flow['OptOnReToAssetTTM'] = np.where(CalcTools.is_zero(cash_flow.total_assets.values), 0,
@@ -158,7 +168,8 @@ class FactorCashFlow(FactorBase):
         return factor_cash_flow
 
     # 经营活动产生的现金流量净额（TTM）/归属于母公司所有者的净利润（TTM）
-    def net_profit_cash_cover_ttm(self, ttm_cash_flow, factor_cash_flow):
+    @staticmethod
+    def net_profit_cash_cover_ttm(ttm_cash_flow, factor_cash_flow):
         columns_list = ['net_operate_cash_flow', 'np_parent_company_owners']
         cash_flow = ttm_cash_flow.loc[:, columns_list]
         cash_flow['NetProCashCoverTTM'] = np.where(
@@ -169,7 +180,8 @@ class FactorCashFlow(FactorBase):
         return factor_cash_flow
 
     # 经营活动产生的现金流量净额（TTM）/总资产（TTM）
-    def oper_cash_in_to_asset_ttm(self, ttm_cash_flow, factor_cash_flow):
+    @staticmethod
+    def oper_cash_in_to_asset_ttm(ttm_cash_flow, factor_cash_flow):
         columns_list = ['net_operate_cash_flow', 'total_assets']
         cash_flow = ttm_cash_flow.loc[:, columns_list]
         cash_flow['OptToAssertTTM'] = np.where(CalcTools.is_zero(cash_flow.total_assets.values),
@@ -180,7 +192,8 @@ class FactorCashFlow(FactorBase):
         return factor_cash_flow
 
     # 销售商品和提供劳务收到的现金（Latest）/营业收入（Latest）
-    def sales_service_cash_to_or_latest(self, tp_cash_flow, factor_cash_flow):
+    @staticmethod
+    def sales_service_cash_to_or_latest(tp_cash_flow, factor_cash_flow):
         columns_list = ['goods_sale_and_service_render_cash', 'operating_revenue']
         cash_flow = tp_cash_flow.loc[:, columns_list]
         cash_flow['SalesServCashToOR'] = np.where(CalcTools.is_zero(cash_flow.operating_revenue.values),
@@ -191,7 +204,8 @@ class FactorCashFlow(FactorBase):
         return factor_cash_flow
 
     # 经验活动产生的现金流量净额 / 营业收入
-    def cash_rate_of_sales_latest(self, tp_cash_flow, factor_cash_flow):
+    @staticmethod
+    def cash_rate_of_sales_latest(tp_cash_flow, factor_cash_flow):
         columns_list = ['net_operate_cash_flow', 'operating_revenue']
         cash_flow = tp_cash_flow.loc[:, columns_list]
         cash_flow['CashOfSales'] = np.where(CalcTools.is_zero(cash_flow.operating_revenue.values),
@@ -202,7 +216,8 @@ class FactorCashFlow(FactorBase):
         return factor_cash_flow
 
     # 经营活动产生的现金流量净额（Latest）/(营业总收入（Latest）-营业总成本（Latest）)
-    def nocf_to_operating_ni_latest(self, tp_cash_flow, factor_cash_flow):
+    @staticmethod
+    def nocf_to_operating_ni_latest(tp_cash_flow, factor_cash_flow):
         columns_list = ['net_operate_cash_flow', 'total_operating_revenue',
                         'total_operating_cost']
         cash_flow = tp_cash_flow.loc[:, columns_list]
@@ -223,7 +238,6 @@ def calculate(trade_date, cash_flow_dic, cash_flow):  # 计算对应因子
 
     factor_cash_flow = pd.DataFrame()
     factor_cash_flow['symbol'] = tp_cash_flow.index
-    # tp_cash_flow.set_index('symbol', inplace=True)
 
     # 非TTM计算
     factor_cash_flow = cash_flow.nocf_to_operating_ni_latest(tp_cash_flow, factor_cash_flow)
@@ -246,14 +260,6 @@ def calculate(trade_date, cash_flow_dic, cash_flow):  # 计算对应因子
     factor_cash_flow['id'] = factor_cash_flow['symbol'] + str(trade_date)
     factor_cash_flow['trade_date'] = str(trade_date)
     cash_flow._storage_data(factor_cash_flow, trade_date)
-
-
-def do_update(self, start_date, end_date, count):
-    # 读取本地交易日
-    trade_date_sets = self._trade_date.trade_date_sets_ago(start_date, end_date, count)
-    for trade_date in trade_date_sets:
-        self.calculate(trade_date)
-    print('----->')
 
 
 @app.task()

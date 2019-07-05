@@ -10,11 +10,10 @@
 """
 
 import sys
+sys.path.append("..")
+
 import json
 from pandas.io.json import json_normalize
-
-
-sys.path.append("..")
 from factor.ttm_fundamental import *
 from factor.factor_base import FactorBase
 from vision.fm.signletion_engine import *
@@ -62,7 +61,8 @@ class PerShareIndicators(FactorBase):
                     )ENGINE=InnoDB DEFAULT CHARSET=utf8;""".format(self._name)
         super(PerShareIndicators, self)._create_tables(create_sql, drop_sql)
 
-    def eps(self, tp_share_indicators, factor_share_indicators):
+    @staticmethod
+    def eps(tp_share_indicators, factor_share_indicators):
         """
         基本每股收益
         :param tp_share_indicators:
@@ -77,7 +77,8 @@ class PerShareIndicators(FactorBase):
         factor_share_indicators = pd.merge(factor_share_indicators, share_indicators, on='symbol')
         return factor_share_indicators
 
-    def diluted_eps(self, tp_share_indicators, factor_share_indicators):
+    @staticmethod
+    def diluted_eps(tp_share_indicators, factor_share_indicators):
         """
         稀释每股收益
         :param tp_share_indicators:
@@ -93,7 +94,8 @@ class PerShareIndicators(FactorBase):
         factor_share_indicators = pd.merge(factor_share_indicators, share_indicators, on='symbol')
         return factor_share_indicators
 
-    def cash_equivalent_ps(self, tp_share_indicators, factor_share_indicators):
+    @staticmethod
+    def cash_equivalent_ps(tp_share_indicators, factor_share_indicators):
         """
         每股现金及现金等价物余额
         :param tp_share_indicators:
@@ -112,7 +114,8 @@ class PerShareIndicators(FactorBase):
         factor_share_indicators = pd.merge(factor_share_indicators, share_indicators, on='symbol')
         return factor_share_indicators
 
-    def dividend_ps(self, tp_share_indicators, factor_share_indicators):
+    @staticmethod
+    def dividend_ps(tp_share_indicators, factor_share_indicators):
         """
         每股股利（税前）
         :param tp_share_indicators:
@@ -128,7 +131,8 @@ class PerShareIndicators(FactorBase):
         factor_share_indicators = pd.merge(factor_share_indicators, share_indicators, on='symbol')
         return factor_share_indicators
 
-    def eps_ttm(self, tp_share_indicators, factor_share_indicators):
+    @staticmethod
+    def eps_ttm(tp_share_indicators, factor_share_indicators):
         """
         每股收益 TTM
         :param tp_share_indicators:
@@ -147,7 +151,8 @@ class PerShareIndicators(FactorBase):
         factor_share_indicators = pd.merge(factor_share_indicators, share_indicators, on='symbol')
         return factor_share_indicators
 
-    def net_asset_ps(self, tp_share_indicators, factor_share_indicators):
+    @staticmethod
+    def net_asset_ps(tp_share_indicators, factor_share_indicators):
         """
         每股净资产
         :param tp_share_indicators:
@@ -165,7 +170,8 @@ class PerShareIndicators(FactorBase):
         factor_share_indicators = pd.merge(factor_share_indicators, share_indicators, on='symbol')
         return factor_share_indicators
 
-    def tor_ps(self, tp_share_indicators, factor_share_indicators):
+    @staticmethod
+    def tor_ps(tp_share_indicators, factor_share_indicators):
         """
         每股营业总收入
         :param tp_share_indicators:
@@ -184,7 +190,8 @@ class PerShareIndicators(FactorBase):
         factor_share_indicators = pd.merge(factor_share_indicators, share_indicators, on='symbol')
         return factor_share_indicators
 
-    def tor_ps_latest(self, tp_share_indicators, factor_share_indicators):
+    @staticmethod
+    def tor_ps_latest(tp_share_indicators, factor_share_indicators):
         """
         每股营业总收入
         :param tp_share_indicators:
@@ -202,7 +209,8 @@ class PerShareIndicators(FactorBase):
         factor_share_indicators = pd.merge(factor_share_indicators, share_indicators, on='symbol')
         return factor_share_indicators
 
-    def operating_revenue_ps(self, tp_share_indicators, factor_share_indicators):
+    @staticmethod
+    def operating_revenue_ps(tp_share_indicators, factor_share_indicators):
         """
         每股营业收入
         :param tp_share_indicators:
@@ -222,7 +230,8 @@ class PerShareIndicators(FactorBase):
         factor_share_indicators = pd.merge(factor_share_indicators, share_indicators, on='symbol')
         return factor_share_indicators
 
-    def operating_revenue_ps_latest(self, tp_share_indicators, factor_share_indicators):
+    @staticmethod
+    def operating_revenue_ps_latest(tp_share_indicators, factor_share_indicators):
         """
         每股营业收入(最新)
         :param tp_share_indicators:
@@ -243,7 +252,8 @@ class PerShareIndicators(FactorBase):
         factor_share_indicators = pd.merge(factor_share_indicators, share_indicators, on='symbol')
         return factor_share_indicators
 
-    def operating_profit_ps(self, tp_share_indicators, factor_share_indicators):
+    @staticmethod
+    def operating_profit_ps(tp_share_indicators, factor_share_indicators):
         """
         每股营业利润
         :param tp_share_indicators:
@@ -264,7 +274,8 @@ class PerShareIndicators(FactorBase):
         factor_share_indicators = pd.merge(factor_share_indicators, share_indicators, on='symbol')
         return factor_share_indicators
 
-    def operating_profit_ps_latest(self, tp_share_indicators, factor_share_indicators):
+    @staticmethod
+    def operating_profit_ps_latest(tp_share_indicators, factor_share_indicators):
         """
         每股营业利润（最新）
         :param tp_share_indicators:
@@ -281,7 +292,8 @@ class PerShareIndicators(FactorBase):
         factor_share_indicators = pd.merge(factor_share_indicators, share_indicators, on='symbol')
         return factor_share_indicators
 
-    def capital_surplus_fund_ps(self, tp_share_indicators, factor_share_indicators):
+    @staticmethod
+    def capital_surplus_fund_ps(tp_share_indicators, factor_share_indicators):
         """
         每股资本公积金
         :param tp_share_indicators:
@@ -301,7 +313,8 @@ class PerShareIndicators(FactorBase):
         factor_share_indicators = pd.merge(factor_share_indicators, share_indicators, on='symbol')
         return factor_share_indicators
 
-    def surplus_reserve_fund_ps(self, tp_share_indicators, factor_share_indicators):
+    @staticmethod
+    def surplus_reserve_fund_ps(tp_share_indicators, factor_share_indicators):
         """
         每股盈余公积金
         :param tp_share_indicators:
@@ -319,7 +332,8 @@ class PerShareIndicators(FactorBase):
         factor_share_indicators = pd.merge(factor_share_indicators, share_indicators, on='symbol')
         return factor_share_indicators
 
-    def undivided_pro_fit_ps(self, tp_share_indicators, factor_share_indicators):
+    @staticmethod
+    def undivided_pro_fit_ps(tp_share_indicators, factor_share_indicators):
         """
         每股未分配利润
         :param tp_share_indicators:
@@ -339,7 +353,8 @@ class PerShareIndicators(FactorBase):
         factor_share_indicators = pd.merge(factor_share_indicators, share_indicators, on='symbol')
         return factor_share_indicators
 
-    def retained_earnings_ps(self, tp_share_indicators, factor_share_indicators):
+    @staticmethod
+    def retained_earnings_ps(tp_share_indicators, factor_share_indicators):
         """
         每股留存收益
         :param tp_share_indicators:
@@ -355,7 +370,8 @@ class PerShareIndicators(FactorBase):
         factor_share_indicators = pd.merge(factor_share_indicators, share_indicators, on='symbol')
         return factor_share_indicators
 
-    def oper_cash_flow_ps(self, tp_share_indicators, factor_share_indicators):
+    @staticmethod
+    def oper_cash_flow_ps(tp_share_indicators, factor_share_indicators):
         """
         每股经营活动产生的现金流量净额
         :param tp_share_indicators:
@@ -376,7 +392,8 @@ class PerShareIndicators(FactorBase):
         factor_share_indicators = pd.merge(factor_share_indicators, share_indicators, on='symbol')
         return factor_share_indicators
 
-    def cash_flow_ps(self, tp_share_indicators, factor_share_indicators):
+    @staticmethod
+    def cash_flow_ps(tp_share_indicators, factor_share_indicators):
         """
         每股现金流量净额
         :param tp_share_indicators:
@@ -394,7 +411,8 @@ class PerShareIndicators(FactorBase):
         factor_share_indicators = pd.merge(factor_share_indicators, share_indicators, on='symbol')
         return factor_share_indicators
 
-    def enterprise_fcfps(self, tp_share_indicators, factor_share_indicators):
+    @staticmethod
+    def enterprise_fcfps(tp_share_indicators, factor_share_indicators):
         """
         每股企业自由现金流量
         缺每股企业自由现金流量
@@ -410,7 +428,8 @@ class PerShareIndicators(FactorBase):
         factor_share_indicators = pd.merge(factor_share_indicators, share_indicators, on='symbol')
         return factor_share_indicators
 
-    def shareholder_fcfps(self, tp_share_indicators, factor_share_indicators):
+    @staticmethod
+    def shareholder_fcfps(tp_share_indicators, factor_share_indicators):
         """
         每股股东自由现金流量
         缺每股股东自由现金流量
@@ -459,14 +478,6 @@ def calculate(trade_date, valuation_sets, per_share):
     factor_share_indicators = per_share.oper_cash_flow_ps(factor_share_indicators, factor_share_indicators)  # memorydrror
     factor_share_indicators = per_share.cash_flow_ps(factor_share_indicators, factor_share_indicators)  # memorydrror
 
-    # factor_historical_value = factor_historical_value.drop(columns=['pb', 'pe', 'ps', 'pcf', 'market_cap',
-    #                                                                 'circulating_market_cap', 'isymbol',
-    #                                                                 'np_parent_company_owners',
-    #                                                                 'np_parent_company_owners_3',
-    #                                                                 'np_parent_company_owners_5',
-    #                                                                 'net_operate_cash_flow', 'net_profit',
-    #                                                                 'goods_sale_and_service_render_cash'])
-
     # factor_share_indicators = factor_share_indicators[['symbol',
     #                                                    'EPS',
     #                                                    'DilutedEPSTTM',
@@ -514,15 +525,6 @@ def calculate(trade_date, valuation_sets, per_share):
     per_share._storage_data(factor_share_indicators, trade_date)
 
 
-def do_update(self, start_date, end_date, count):
-    # 读取本地交易日
-    trade_date_sets = self._trade_date.trade_date_sets_ago(start_date, end_date, count)
-    for trade_date in trade_date_sets:
-        print('当前交易日： %s' % trade_date)
-        self.calculate(trade_date)
-    print('----->')
-
-
 # @app.task()
 def factor_calculate(**kwargs):
     print("per_share_kwargs: {}".format(kwargs))
@@ -530,6 +532,6 @@ def factor_calculate(**kwargs):
     session = kwargs['session']
     per_share = PerShareIndicators('factor_per_share')  # 注意, 这里的name要与client中新建table时的name一致, 不然回报错
     content = cache_data.get_cache(session, date_index)
-    total_growth_data = json_normalize(json.loads(str(content, encoding='utf8')))
-    print("len_total_per_share_data {}".format(len(total_growth_data)))
-    calculate(date_index, total_growth_data, per_share)
+    total_pre_share_data = json_normalize(json.loads(str(content, encoding='utf8')))
+    print("len_total_per_share_data {}".format(len(total_pre_share_data)))
+    calculate(date_index, total_pre_share_data, per_share)

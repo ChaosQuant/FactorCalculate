@@ -60,7 +60,8 @@ class HistoricalValue(FactorBase):
                     )ENGINE=InnoDB DEFAULT CHARSET=utf8;""".format(self._name)
         super(HistoricalValue, self)._create_tables(create_sql, drop_sql)
 
-    def ps_indu(self, tp_historical_value, factor_historical_value):
+    @staticmethod
+    def ps_indu(tp_historical_value, factor_historical_value):
         """
         PEIndu， 市销率，以及同行业所有的公司的市销率
         # (PS – PS 的行业均值)/PS 的行业标准差
@@ -84,7 +85,8 @@ class HistoricalValue(FactorBase):
         factor_historical_value = pd.merge(factor_historical_value, historical_value, on="symbol")
         return factor_historical_value
 
-    def etop(self, tp_historical_value, factor_historical_value):
+    @staticmethod
+    def etop(tp_historical_value, factor_historical_value):
         """
         收益市值比
         # 收益市值比= 净利润/总市值
@@ -105,7 +107,8 @@ class HistoricalValue(FactorBase):
         return factor_historical_value
 
     # 5年平均收益市值比 = 近5年净利润 / 近5年总市值
-    def etp5(self, tp_historical_value, factor_historical_value):
+    @staticmethod
+    def etp5(tp_historical_value, factor_historical_value):
         columns_lists = ['symbol', 'net_profit_5', 'circulating_market_cap_5', 'market_cap_5']
         historical_value = tp_historical_value.loc[:, columns_lists]
 
@@ -117,7 +120,8 @@ class HistoricalValue(FactorBase):
         factor_historical_value = pd.merge(factor_historical_value, historical_value, on="symbol")
         return factor_historical_value
 
-    def pe_indu(self, tp_historical_value, factor_historical_value):
+    @staticmethod
+    def pe_indu(tp_historical_value, factor_historical_value):
         """
         # (PE – PE 的行业均值)/PE 的行业标准差
         :param tp_historical_value:
@@ -138,7 +142,8 @@ class HistoricalValue(FactorBase):
         factor_historical_value = pd.merge(factor_historical_value, historical_value, on="symbol")
         return factor_historical_value
 
-    def peg_3y(self, tp_historical_value, factor_historical_value):
+    @staticmethod
+    def peg_3y(tp_historical_value, factor_historical_value):
         """
         # 市盈率/归属于母公司所有者净利润 3 年复合增长率
         :param tp_historical_value:
@@ -157,7 +162,8 @@ class HistoricalValue(FactorBase):
         factor_historical_value = pd.merge(factor_historical_value, historical_value, on="symbol")
         return factor_historical_value
 
-    def peg_5y(self, tp_historical_value, factor_historical_value):
+    @staticmethod
+    def peg_5y(tp_historical_value, factor_historical_value):
         """
         # 市盈率/归属于母公司所有者净利润 5 年复合增长率
         :param tp_historical_value:
@@ -176,7 +182,8 @@ class HistoricalValue(FactorBase):
         factor_historical_value = pd.merge(factor_historical_value, historical_value, on="symbol")
         return factor_historical_value
 
-    def pb_indu(self, tp_historical_value, factor_historical_value):
+    @staticmethod
+    def pb_indu(tp_historical_value, factor_historical_value):
         """
         # (PB – PB 的行业均值)/PB 的行业标准差
         :param tp_historical_value:
@@ -198,7 +205,8 @@ class HistoricalValue(FactorBase):
         factor_historical_value = pd.merge(factor_historical_value, historical_value, on="symbol")
         return factor_historical_value
 
-    def lcap(self, tp_historical_value, factor_historical_value):
+    @staticmethod
+    def lcap(tp_historical_value, factor_historical_value):
         """
         总市值的对数
         # 对数市值 即市值的对数
@@ -213,7 +221,8 @@ class HistoricalValue(FactorBase):
         factor_historical_value = pd.merge(factor_historical_value, historical_value, on="symbol")
         return factor_historical_value
 
-    def lflo(self, tp_historical_value, factor_historical_value):
+    @staticmethod
+    def lflo(tp_historical_value, factor_historical_value):
         """
         流通总市值的对数
         # 对数市值 即流通市值的对数
@@ -229,7 +238,8 @@ class HistoricalValue(FactorBase):
         factor_historical_value = pd.merge(factor_historical_value, historical_value, on="symbol")
         return factor_historical_value
 
-    def nlsize(self, tp_historical_value, factor_historical_value):
+    @staticmethod
+    def nlsize(tp_historical_value, factor_historical_value):
         """
         对数市值开立方
         :param tp_historical_value:
@@ -243,7 +253,8 @@ class HistoricalValue(FactorBase):
         factor_historical_value = pd.merge(factor_historical_value, historical_value, on="symbol")
         return factor_historical_value
 
-    def pcf_indu(self, tp_historical_value, factor_historical_value):
+    @staticmethod
+    def pcf_indu(tp_historical_value, factor_historical_value):
         """
         # (PCF – PCF 的行业均值)/PCF 的行业标准差
         :param tp_historical_value:
@@ -267,7 +278,8 @@ class HistoricalValue(FactorBase):
         factor_historical_value = pd.merge(factor_historical_value, historical_value, on="symbol")
         return factor_historical_value
 
-    def cetop(self, tp_historical_value, factor_historical_value):
+    @staticmethod
+    def cetop(tp_historical_value, factor_historical_value):
         """
         # 经营活动产生的现金流量净额与市值比
         :param tp_historical_value:
@@ -287,7 +299,8 @@ class HistoricalValue(FactorBase):
         return factor_historical_value
 
     # 现金流市值比 = 每股派现 * 分红前总股本/总市值
-    def ctop(self, tp_historical_value, factor_historical_value):
+    @staticmethod
+    def ctop(tp_historical_value, factor_historical_value):
         columns_lists = ['symbol', 'pcd', 'sbd', 'circulating_market_cap', 'market_cap']
         historical_value = tp_historical_value.loc[:, columns_lists]
 
@@ -300,7 +313,8 @@ class HistoricalValue(FactorBase):
         return factor_historical_value
 
     # 5 年平均现金流市值比  = 近5年每股派现 * 分红前总股本/近5年总市值
-    def ctop5(self, tp_historical_value, factor_historical_value):
+    @staticmethod
+    def ctop5(tp_historical_value, factor_historical_value):
         columns_lists = ['symbol', 'pcd', 'sbd', 'circulating_market_cap_5', 'market_cap_5']
         historical_value = tp_historical_value.loc[:, columns_lists]
 
@@ -318,14 +332,11 @@ class HistoricalValue(FactorBase):
 
 def calculate(trade_date, valuation_sets, historical_value):
     """
-
+    :param historical_value:
+    :param valuation_sets:
     :param trade_date:
     :return:
     """
-    # valuation_sets, ttm_factor_sets, cash_flow_sets, income_sets = self.get_basic_data(trade_date)
-    # valuation_sets = pd.merge(valuation_sets, income_sets, on='symbol')
-    # valuation_sets = pd.merge(valuation_sets, ttm_factor_sets, on='symbol')
-    # valuation_sets = pd.merge(valuation_sets, cash_flow_sets, on='symbol')
     if len(valuation_sets) <= 0:
         print("%s has no data" % trade_date)
         return
@@ -375,15 +386,6 @@ def calculate(trade_date, valuation_sets, historical_value):
     factor_historical_value['id'] = factor_historical_value['symbol'] + str(trade_date)
     factor_historical_value['trade_date'] = str(trade_date)
     historical_value._storage_data(factor_historical_value, trade_date)
-
-
-def do_update(self, start_date, end_date, count):
-    # 读取本地交易日
-    trade_date_sets = self._trade_date.trade_date_sets_ago(start_date, end_date, count)
-    for trade_date in trade_date_sets:
-        print('因子计算日期： %s' % trade_date)
-        self.calculate(trade_date)
-    print('----->')
 
 
 @app.task()

@@ -1,7 +1,5 @@
-import pdb
-import collections
 import time
-
+import collections
 from datetime import datetime, timedelta
 from factor import factor_growth, historical_value, factor_per_share_indicators, factor_cash_flow, factor_contrarian, factor_earning
 from factor.ttm_fundamental import *
@@ -11,10 +9,8 @@ from vision.file_unit.income import Income
 from vision.file_unit.valuation import Valuation
 from vision.file_unit.industry import Industry
 from vision.file_unit.indicator import Indicator
-
 from factor.utillities.trade_date import TradeDate
 from ultron.cluster.invoke.cache_data import cache_data
-from ultron.utilities.short_uuid import unique_machine, decode
 
 
 def get_trade_date(trade_date, n):
@@ -48,7 +44,6 @@ def get_basic_growth_data(trade_date):
     :param trade_date: 交易日
     :return:
     """
-
     trade_date_pre_year = get_trade_date(trade_date, 1)
     trade_date_pre_year_2 = get_trade_date(trade_date, 2)
     trade_date_pre_year_3 = get_trade_date(trade_date, 3)
@@ -262,7 +257,6 @@ def get_basic_history_value_data(trade_date):
     ttm_factor_sets_5 = ttm_factor_sets_5.drop(columns={"trade_date"})
 
     # ttm_factor_sets_sum = ttm_factor_sets_sum.rename(columns={"net_profit": "net_profit_5"})
-
     ttm_factor_sets = pd.merge(ttm_factor_sets, ttm_factor_sets_3, on='symbol')
     ttm_factor_sets = pd.merge(ttm_factor_sets, ttm_factor_sets_5, on='symbol')
     # ttm_factor_sets = pd.merge(ttm_factor_sets, ttm_factor_sets_sum, on='symbol')
@@ -375,12 +369,12 @@ def get_basic_cash_flow(trade_date):
                                      Income.total_operating_cost, Income.net_profit,
                                      Income.np_parent_company_owners]
                    }
-    ttm_factor_sets = get_ttm_fundamental([], ttm_factors, trade_date).reset_index()
-    ttm_factor_sets = ttm_factor_sets[-ttm_factor_sets.duplicated()]
+    ttm_cash_flow_sets = get_ttm_fundamental([], ttm_factors, trade_date).reset_index()
+    ttm_cash_flow_sets = ttm_cash_flow_sets[-ttm_cash_flow_sets.duplicated()]
     # 合并
-    ttm_factor_sets = pd.merge(ttm_factor_sets, valuation_sets, on="symbol")
+    ttm_cash_flow_sets = pd.merge(ttm_cash_flow_sets, valuation_sets, on="symbol")
 
-    return tp_cash_flow, ttm_factor_sets
+    return tp_cash_flow, ttm_cash_flow_sets
 
 
 def get_basic_constrain(trade_date):
@@ -408,10 +402,10 @@ def get_basic_constrain(trade_date):
                                    Income.administration_expense
                                    ]}
 
-    ttm_factors_sets = get_ttm_fundamental([], ttm_factors, trade_date).reset_index()
-    ttm_factors_sets = ttm_factors_sets[-ttm_factors_sets.duplicated()]
+    ttm_constrain_sets = get_ttm_fundamental([], ttm_factors, trade_date).reset_index()
+    ttm_constrain_sets = ttm_constrain_sets[-ttm_constrain_sets.duplicated()]
 
-    return balance_sets, ttm_factors_sets
+    return balance_sets, ttm_constrain_sets
 
 
 def get_basic_earning(trade_date):
@@ -572,9 +566,9 @@ if __name__ == '__main__':
         print('per_share_cal_time:{}'.format(time3 - time2))
 
         # cash flow
-        tp_cash_flow, ttm_factor_sets = get_basic_cash_flow(date_index)
+        tp_cash_flow, ttm_cash_flow_sets = get_basic_cash_flow(date_index)
         cache_data.set_cache(session4 + "1", date_index, tp_cash_flow.to_json(orient='records'))
-        cache_data.set_cache(session4 + "2", date_index, ttm_factor_sets.to_json(orient='records'))
+        cache_data.set_cache(session4 + "2", date_index, ttm_cash_flow_sets.to_json(orient='records'))
         factor_cash_flow.factor_calculate(date_index=date_index, session=session4)
         time4 = time.time()
         print('cash_flow_cal_time:{}'.format(time4 - time3))

@@ -76,7 +76,8 @@ class FactorEarning(FactorBase):
                     )ENGINE=InnoDB DEFAULT CHARSET=utf8;""".format(self._name)
         super(FactorEarning, self)._create_tables(create_sql, drop_sql)
 
-    def net_profit_ratio(self, ttm_earning, factor_earning):
+    @staticmethod
+    def net_profit_ratio(ttm_earning, factor_earning):
         """
         销售净利率（Net profit ratio）
         销售净利率=净利润/营业收入
@@ -93,7 +94,8 @@ class FactorEarning(FactorBase):
         factor_earning = pd.merge(factor_earning, earning, on="symbol")
         return factor_earning
 
-    def operating_profit_ratio(self, ttm_earning, factor_earning):
+    @staticmethod
+    def operating_profit_ratio(ttm_earning, factor_earning):
         """
         营业净利率
         营业净利率=营业利润/营业收入
@@ -110,7 +112,8 @@ class FactorEarning(FactorBase):
         factor_earning = pd.merge(factor_earning, earning, on="symbol")
         return factor_earning
 
-    def np_to_tor(self, ttm_earning, factor_earning):
+    @staticmethod
+    def np_to_tor(ttm_earning, factor_earning):
         """
         净利润与营业总收入之比
         净利润与营业总收入之比=净利润/营业总收入
@@ -127,7 +130,8 @@ class FactorEarning(FactorBase):
         factor_earning = pd.merge(factor_earning, earning, on="symbol")
         return factor_earning
 
-    def operating_profit_to_tor(self, ttm_earning, factor_earning):
+    @staticmethod
+    def operating_profit_to_tor(ttm_earning, factor_earning):
         """
         营业利润与营业总收入之比
         营业利润与营业总收入之比=营业利润/营业总收入
@@ -144,7 +148,8 @@ class FactorEarning(FactorBase):
         factor_earning = pd.merge(factor_earning, earning, on="symbol")
         return factor_earning
 
-    def gross_income_ratio(self, ttm_earning, factor_earning):
+    @staticmethod
+    def gross_income_ratio(ttm_earning, factor_earning):
         """
         销售毛利率
         销售毛利率=（营业收入-营业成本）/营业收入
@@ -162,7 +167,8 @@ class FactorEarning(FactorBase):
         factor_earning = pd.merge(factor_earning, earning, on="symbol")
         return factor_earning
 
-    def ebit_to_tor(self, ttm_earning, factor_earning):
+    @staticmethod
+    def ebit_to_tor(ttm_earning, factor_earning):
         """
         息税前利润与营业总收入之比
         息税前利润与营业总收入之比=（利润总额+利息支出-利息收入)/营业总收入
@@ -183,7 +189,8 @@ class FactorEarning(FactorBase):
         factor_earning = pd.merge(factor_earning, earning, on="symbol")
         return factor_earning
 
-    def roa(self, ttm_earning, factor_earning):
+    @staticmethod
+    def roa(ttm_earning, factor_earning):
         """
         资产回报率
         资产回报率=净利润/总资产
@@ -200,11 +207,12 @@ class FactorEarning(FactorBase):
         factor_earning = pd.merge(factor_earning, earning, on="symbol")
         return factor_earning
 
-    def roa5(self, ttm_earning_5y, factor_earning):
+    @staticmethod
+    def roa5(ttm_earning_5y, factor_earning):
         """
         5年权益回报率
         5年权益回报率=净利润/总资产
-        :param ttm_earning:
+        :param ttm_earning_5y:
         :param factor_earning:
         :return:
         """
@@ -217,7 +225,8 @@ class FactorEarning(FactorBase):
         factor_earning = pd.merge(factor_earning, earning, on="symbol")
         return factor_earning
 
-    def roe(self, ttm_earning, factor_earning):
+    @staticmethod
+    def roe(ttm_earning, factor_earning):
         """
         权益回报率
         权益回报率=净利润/股东权益
@@ -234,10 +243,11 @@ class FactorEarning(FactorBase):
         factor_earning = pd.merge(factor_earning, earning, on="symbol")
         return factor_earning
 
-    def roe5(self, ttm_earning_5y, factor_earning):
+    @staticmethod
+    def roe5(ttm_earning_5y, factor_earning):
         """
         5年权益回报率
-        :param ttm_earning:
+        :param ttm_earning_5y:
         :param factor_earning:
         :return:
         """
@@ -250,11 +260,12 @@ class FactorEarning(FactorBase):
         factor_earning = pd.merge(factor_earning, earning, on="symbol")
         return factor_earning
 
-    def roe_diluted(self, tp_earning, factor_earning):
+    @staticmethod
+    def roe_diluted(tp_earning, factor_earning):
         """
         净资产收益率（摊薄）
         净资产收益率（摊薄）=归属于母公司的净利润/期末归属于母公司的所有者权益
-        :param ttm_earning:
+        :param tp_earning:
         :param factor_earning:
         :return:
         """
@@ -269,7 +280,8 @@ class FactorEarning(FactorBase):
         factor_earning = pd.merge(factor_earning, earning, on="symbol")
         return factor_earning
 
-    def roe_avg(self, ttm_earning, factor_earning):
+    @staticmethod
+    def roe_avg(ttm_earning, factor_earning):
         """
         资产收益率（平均）
         资产收益率（平均）=归属于母公司的净利润*2/(期末归属于母公司的所有者权益
@@ -289,7 +301,6 @@ class FactorEarning(FactorBase):
         factor_earning = pd.merge(factor_earning, earning, on="symbol")
         return factor_earning
 
-
     def roe_weighted(self, ttm_earning, factor_earning):
         """
         :param ttm_earning:
@@ -298,7 +309,8 @@ class FactorEarning(FactorBase):
         """
         pass
 
-    def roe_cut(self, tp_earning, factor_earning):
+    @staticmethod
+    def roe_cut(tp_earning, factor_earning):
         """
         :param tp_earning:
         :param factor_earning:
@@ -338,7 +350,8 @@ class FactorEarning(FactorBase):
         """
         pass
 
-    def roa_ebit_ttm(self, ttm_earning, factor_earning):
+    @staticmethod
+    def roa_ebit_ttm(ttm_earning, factor_earning):
         """
         总资产报酬率
         ROAEBIT = EBIT*2/(期初总资产+期末总资产）
@@ -360,7 +373,8 @@ class FactorEarning(FactorBase):
         factor_earning = pd.merge(factor_earning, earning, on="symbol")
         return factor_earning
 
-    def operating_ni_to_tp_ttm(self, ttm_earning, factor_earning):
+    @staticmethod
+    def operating_ni_to_tp_ttm(ttm_earning, factor_earning):
         """
         经营活动净收益/利润总额
         （注，对于非金融企业 经营活动净收益=营业总收入-营业总成本；
@@ -382,7 +396,8 @@ class FactorEarning(FactorBase):
         factor_earning = pd.merge(factor_earning, earning, on="symbol")
         return factor_earning
 
-    def operating_ni_to_tp_latest(self, tp_earning, factor_earning):
+    @staticmethod
+    def operating_ni_to_tp_latest(tp_earning, factor_earning):
         """
         经营活动净收益/利润总额
         （注，对于非金融企业 经营活动净收益=营业总收入-营业总成本；
@@ -404,7 +419,8 @@ class FactorEarning(FactorBase):
         factor_earning = pd.merge(factor_earning, earning, on="symbol")
         return factor_earning
 
-    def invest_r_associates_to_tp_ttm(self, ttm_earning, factor_earning):
+    @staticmethod
+    def invest_r_associates_to_tp_ttm(ttm_earning, factor_earning):
         """
         对联营和营公司投资收益/利润总额
         :param ttm_earning:
@@ -421,7 +437,8 @@ class FactorEarning(FactorBase):
         factor_earning = pd.merge(factor_earning, earning, on="symbol")
         return factor_earning
 
-    def invest_r_associates_to_tp_latest(self, tp_earning, factor_earning):
+    @staticmethod
+    def invest_r_associates_to_tp_latest(tp_earning, factor_earning):
         """
         对联营和营公司投资收益/利润总额
         :param tp_earning:
@@ -438,7 +455,8 @@ class FactorEarning(FactorBase):
         factor_earning = pd.merge(factor_earning, earning, on="symbol")
         return factor_earning
 
-    def npcut_to_np(self, tp_earning, factor_earning):
+    @staticmethod
+    def npcut_to_np(tp_earning, factor_earning):
         """
         扣除非经常损益后的净利润/净利润
         :param tp_earning:
@@ -455,7 +473,8 @@ class FactorEarning(FactorBase):
         factor_earning = pd.merge(factor_earning, earning, on="symbol")
         return factor_earning
 
-    def interest_cover_ttm(self, ttm_earning, factor_earning):
+    @staticmethod
+    def interest_cover_ttm(ttm_earning, factor_earning):
         """
         利息保障倍数
         InterestCover=(TP + INT_EXP - INT_COME)/(INT_EXP - INT_COME)
@@ -467,21 +486,18 @@ class FactorEarning(FactorBase):
         columns_list = ['total_profit', 'financial_expense', 'interest_income']
         earning = ttm_earning.loc[:, columns_list]
         earning['interest_cover_ttm'] = np.where(
-            CalcTools.is_zero(earning.financial_expense.values-
-                              earning.interest_income.values), 0,
-            (earning.total_profit.values +
-             earning.financial_expense.values -
-             earning.interest_income.values)
-            / (earning.financial_expense.values -
-               earning.interest_income.values)
-                )
+            CalcTools.is_zero(earning.financial_expense.values - earning.interest_income.values), 0,
+            (earning.total_profit.values + earning.financial_expense.values - earning.interest_income.values) /
+            (earning.financial_expense.values - earning.interest_income.values))
         earning = earning.drop(columns_list, axis=1)
         factor_earning = pd.merge(factor_earning, earning, on="symbol")
         return factor_earning
 
-    def degm(self, ttm_earning, ttm_earning_p1y, factor_earning):
+    @staticmethod
+    def degm(ttm_earning, ttm_earning_p1y, factor_earning):
         """
         毛利率增长，与去年同期相比
+        :param ttm_earning_p1y:
         :param ttm_earning:
         :param factor_earning:
         :return:
@@ -506,7 +522,8 @@ class FactorEarning(FactorBase):
         factor_earning = pd.merge(factor_earning, earning, on="symbol")
         return factor_earning
 
-    def net_non_oi_to_tp_ttm(self, ttm_earning, factor_earning):
+    @staticmethod
+    def net_non_oi_to_tp_ttm(ttm_earning, factor_earning):
         """
         营业外收支净额/利润总额
         :param ttm_earning:
@@ -525,7 +542,8 @@ class FactorEarning(FactorBase):
         factor_earning = pd.merge(factor_earning, earning, on="symbol")
         return factor_earning
 
-    def net_non_oi_to_tp_latest(self, tp_earning, factor_earning):
+    @staticmethod
+    def net_non_oi_to_tp_latest(tp_earning, factor_earning):
         """
         营业外收支净额/利润总额
         :param tp_earning:
