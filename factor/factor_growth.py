@@ -15,7 +15,6 @@ from factor import app
 from factor.factor_base import FactorBase
 from factor.ttm_fundamental import *
 from vision.fm.signletion_engine import *
-from factor.utillities import trade_date as td
 from ultron.cluster.invoke.cache_data import cache_data
 
 

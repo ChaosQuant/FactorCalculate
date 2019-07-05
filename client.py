@@ -1,7 +1,7 @@
 import time
 import collections
 from datetime import datetime, timedelta
-from factor import factor_growth, historical_value, factor_per_share_indicators, factor_cash_flow, factor_contrarian, factor_earning
+from factor import factor_growth, historical_value, factor_per_share_indicators, factor_cash_flow, factor_constrain, factor_earning
 from factor.ttm_fundamental import *
 from vision.file_unit.balance import Balance
 from vision.file_unit.cash_flow import CashFlow
@@ -527,7 +527,7 @@ if __name__ == '__main__':
         cash_flow.create_dest_tables()
 
         # constrain
-        constrain = factor_contrarian.FactorContrarian('factor_constrain')
+        constrain = factor_constrain.FactorConstrain('factor_constrain')
         constrain.create_dest_tables()
 
         # earning
@@ -577,7 +577,7 @@ if __name__ == '__main__':
         balance_sets, ttm_factors_sets = get_basic_constrain(date_index)
         cache_data.set_cache(session5 + '1', date_index, balance_sets.to_json(orient='records'))
         cache_data.set_cache(session5 + '2', date_index, ttm_factors_sets.to_json(orient='records'))
-        factor_contrarian.factor_calculate(date_index=date_index, session=session5)
+        factor_constrain.factor_calculate(date_index=date_index, session=session5)
         time5 = time.time()
         print('constrain_cal_time:{}'.format(time5 - time4))
 

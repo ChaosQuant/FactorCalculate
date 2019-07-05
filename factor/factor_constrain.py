@@ -14,9 +14,9 @@ from vision.utillities.calc_tools import CalcTools
 from ultron.cluster.invoke.cache_data import cache_data
 
 
-class FactorContrarian(FactorBase):
+class FactorConstrain(FactorBase):
     def __init__(self, name):
-        super(FactorContrarian, self).__init__(name)
+        super(FactorConstrain, self).__init__(name)
 
     # 构建因子表
     def create_dest_tables(self):
@@ -36,7 +36,7 @@ class FactorContrarian(FactorBase):
                     `IntBDToCap` decimal(19,4),
                      PRIMARY KEY(`id`,`trade_date`,`symbol`)
                     )ENGINE=InnoDB DEFAULT CHARSET=utf8;""".format(self._name)
-        super(FactorContrarian, self)._create_tables(create_sql, drop_sql)
+        super(FactorConstrain, self)._create_tables(create_sql, drop_sql)
 
     # 销售成本率=营业成本(TTM)/营业收入(TTM)
     @staticmethod
@@ -189,7 +189,7 @@ def factor_calculate(**kwargs):
     print("constrain_kwargs: {}".format(kwargs))
     date_index = kwargs['date_index']
     session = kwargs['session']
-    constrain = FactorContrarian('factor_constrain')  # 注意, 这里的name要与client中新建table时的name一致, 不然回报错
+    constrain = FactorConstrain('factor_constrain')  # 注意, 这里的name要与client中新建table时的name一致, 不然回报错
     content1 = cache_data.get_cache(session + '1', date_index)
     content2 = cache_data.get_cache(session + '2', date_index)
     balance_sets = json_normalize(json.loads(str(content1, encoding='utf8')))
