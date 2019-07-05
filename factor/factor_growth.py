@@ -21,7 +21,7 @@ from ultron.cluster.invoke.cache_data import cache_data
 
 class Growth(FactorBase):
     """
-    成长类因子
+    历史成长
     """
     def __init__(self, name):
         super(Growth, self).__init__(name)

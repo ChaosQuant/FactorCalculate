@@ -12,7 +12,6 @@
 - factor_constrain  # 收益质量
 - factor_earning  # 收益质量
 - factor_per_share_indicators  # 收益质量
-- factor_growth # 未使用
 
 ### client
 程序执行入口
