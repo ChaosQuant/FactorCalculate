@@ -567,25 +567,25 @@ if __name__ == '__main__':
 
         # cash flow
         tp_cash_flow, ttm_cash_flow_sets = get_basic_cash_flow(date_index)
-        cache_data.set_cache(session4 + date_index + "1", date_index, tp_cash_flow.to_json(orient='records'))
-        cache_data.set_cache(session4 + date_index + "2", date_index, ttm_cash_flow_sets.to_json(orient='records'))
+        cache_data.set_cache(session4 + str(date_index) + "1", date_index, tp_cash_flow.to_json(orient='records'))
+        cache_data.set_cache(session4 + str(date_index) + "2", date_index, ttm_cash_flow_sets.to_json(orient='records'))
         factor_cash_flow.factor_calculate.delay(date_index=date_index, session=session4)
         time4 = time.time()
         print('cash_flow_cal_time:{}'.format(time4 - time3))
 
         # constrain
         balance_sets, ttm_factors_sets = get_basic_constrain(date_index)
-        cache_data.set_cache(session5 + date_index + '1', date_index, balance_sets.to_json(orient='records'))
-        cache_data.set_cache(session5 + date_index + '2', date_index, ttm_factors_sets.to_json(orient='records'))
+        cache_data.set_cache(session5 + str(date_index) + '1', date_index, balance_sets.to_json(orient='records'))
+        cache_data.set_cache(session5 + str(date_index) + '2', date_index, ttm_factors_sets.to_json(orient='records'))
         factor_constrain.factor_calculate.delay(date_index=date_index, session=session5)
         time5 = time.time()
         print('constrain_cal_time:{}'.format(time5 - time4))
 
         # earning
         # tp_earning, ttm_earning_5y, ttm_earning = get_basic_earning(date_index)
-        # cache_data.set_cache(session6 + date_index + "1", date_index, tp_earning.to_json(orient='records'))
-        # cache_data.set_cache(session6 + date_index + "2", date_index, ttm_earning_5y.to_json(orient='records'))
-        # cache_data.set_cache(session6 + date_index + "3", date_index, ttm_earning.to_json(orient='records'))
+        # cache_data.set_cache(session6 + str(date_index) + "1", date_index, tp_earning.to_json(orient='records'))
+        # cache_data.set_cache(session6 + str(date_index) + "2", date_index, ttm_earning_5y.to_json(orient='records'))
+        # cache_data.set_cache(session6 + str(date_index) + "3", date_index, ttm_earning.to_json(orient='records'))
         # factor_earning.factor_calculate.delay(date_index=date_index, session=session6)
         # time6 = time.time()
         # print('earning_cal_time:{}'.format(time6 - time5))

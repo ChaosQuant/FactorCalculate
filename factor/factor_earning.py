@@ -599,9 +599,9 @@ def factor_calculate(**kwargs):
     date_index = kwargs['date_index']
     session = kwargs['session']
     earning = FactorEarning('factor_earning')  # 注意, 这里的name要与client中新建table时的name一致, 不然回报错
-    content1 = cache_data.get_cache(session + date_index + "1", date_index)
-    content2 = cache_data.get_cache(session + date_index + "2", date_index)
-    content3 = cache_data.get_cache(session + date_index + "3", date_index)
+    content1 = cache_data.get_cache(session + str(date_index) + "1", date_index)
+    content2 = cache_data.get_cache(session + str(date_index) + "2", date_index)
+    content3 = cache_data.get_cache(session + str(date_index) + "3", date_index)
     tp_earning = json_normalize(json.loads(str(content1, encoding='utf8')))
     ttm_earning_5y = json_normalize(json.loads(str(content2, encoding='utf8')))
     ttm_earning = json_normalize(json.loads(str(content3, encoding='utf8')))
