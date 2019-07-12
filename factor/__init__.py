@@ -13,4 +13,5 @@ app = create_app('factor', ['factor.factor_growth',
                             'factor.historical_value',
                             'factor.factor_cash_flow',
                             'factor.factor_constrain',
-                            'factor.factor_earning'])
+                            'factor.factor_earning',
+                            'factor.factor_per_share_indicators'])

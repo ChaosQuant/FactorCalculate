@@ -17,7 +17,6 @@ from pandas.io.json import json_normalize
 from factor import app
 from factor.factor_base import FactorBase
 from factor.ttm_fundamental import *
-from vision.fm.signletion_engine import *
 from factor.utillities.calc_tools import CalcTools
 from ultron.cluster.invoke.cache_data import cache_data
 

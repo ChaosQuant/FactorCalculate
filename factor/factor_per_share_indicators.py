@@ -13,10 +13,10 @@ import sys
 sys.path.append("..")
 
 import json
+from factor import app
 from pandas.io.json import json_normalize
 from factor.ttm_fundamental import *
 from factor.factor_base import FactorBase
-from vision.fm.signletion_engine import *
 from ultron.cluster.invoke.cache_data import cache_data
 
 
@@ -526,7 +526,7 @@ def calculate(trade_date, valuation_sets, per_share):
     per_share._storage_data(factor_share_indicators, trade_date)
 
 
-# @app.task()
+@app.task()
 def factor_calculate(**kwargs):
     print("per_share_kwargs: {}".format(kwargs))
     date_index = kwargs['date_index']

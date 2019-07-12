@@ -8,8 +8,7 @@ import numpy as np
 from pandas.io.json import json_normalize
 from factor.ttm_fundamental import *
 from factor.factor_base import FactorBase
-from vision.fm.signletion_engine import *
-from vision.utillities.calc_tools import CalcTools
+from factor.utillities.calc_tools import CalcTools
 from ultron.cluster.invoke.cache_data import cache_data
 
 
@@ -272,8 +271,8 @@ def factor_calculate(**kwargs):
     session = kwargs['session']
     cash_flow = FactorCashFlow('factor_cash_flow')  # 注意, 这里的name要与client中新建table时的name一致, 不然回报错
 
-    content1 = cache_data.get_cache(session + "1", date_index)
-    content2 = cache_data.get_cache(session + "2", date_index)
+    content1 = cache_data.get_cache(session + date_index + "1", date_index)
+    content2 = cache_data.get_cache(session + date_index + "2", date_index)
     tp_cash_flow = json_normalize(json.loads(str(content1, encoding='utf8')))
     ttm_factor_sets = json_normalize(json.loads(str(content2, encoding='utf8')))
     tp_cash_flow.set_index('symbol', inplace=True)
