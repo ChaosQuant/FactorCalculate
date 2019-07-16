@@ -338,22 +338,26 @@ def get_basic_cash_flow(trade_date):
     :return:
     """
     cash_flow_sets = get_fundamentals(add_filter_trade(query(CashFlow.__name__,
-                                                             [CashFlow.symbol, CashFlow.net_operate_cash_flow,
+                                                             [CashFlow.symbol,
+                                                              CashFlow.net_operate_cash_flow,
                                                               CashFlow.goods_sale_and_service_render_cash])
                                                        , [trade_date]))
     income_sets = get_fundamentals(add_filter_trade(query(Income.__name__,
-                                                          [Income.symbol, Income.operating_revenue,
+                                                          [Income.symbol,
+                                                           Income.operating_revenue,
                                                            Income.total_operating_cost,
                                                            Income.total_operating_revenue]), [trade_date]))
     valuation_sets = get_fundamentals(add_filter_trade(query(Valuation.__name__,
-                                                             [Valuation.symbol, Valuation.market_cap,
+                                                             [Valuation.symbol,
+                                                              Valuation.market_cap,
                                                               Valuation.circulating_market_cap]), [trade_date]))
 
     # 合并
     tp_cash_flow = pd.merge(cash_flow_sets, income_sets, on="symbol")
     tp_cash_flow = tp_cash_flow[-tp_cash_flow.duplicated()]
 
-    ttm_factors = {Balance.__name__: [Balance.symbol, Balance.total_liability,
+    ttm_factors = {Balance.__name__: [Balance.symbol,
+                                      Balance.total_liability,
                                       Balance.shortterm_loan,
                                       Balance.longterm_loan,
                                       Balance.total_current_liability,
@@ -365,8 +369,11 @@ def get_basic_cash_flow(trade_date):
                                        CashFlow.net_operate_cash_flow,
                                        CashFlow.goods_sale_and_service_render_cash,
                                        CashFlow.cash_and_equivalents_at_end],
-                   Income.__name__: [Income.symbol, Income.operating_revenue, Income.total_operating_revenue,
-                                     Income.total_operating_cost, Income.net_profit,
+                   Income.__name__: [Income.symbol,
+                                     Income.operating_revenue,
+                                     Income.total_operating_revenue,
+                                     Income.total_operating_cost,
+                                     Income.net_profit,
                                      Income.np_parent_company_owners]
                    }
     ttm_cash_flow_sets = get_ttm_fundamental([], ttm_factors, trade_date).reset_index()
@@ -392,7 +399,8 @@ def get_basic_constrain(trade_date):
     balance_sets = balance_sets[-balance_sets.duplicated()]
 
     # TTM计算
-    ttm_factors = {Income._name_: [Income.symbol, Income.operating_cost,
+    ttm_factors = {Income._name_: [Income.symbol,
+                                   Income.operating_cost,
                                    Income.operating_revenue,
                                    Income.operating_tax_surcharges,
                                    Income.total_operating_revenue,
@@ -479,13 +487,11 @@ def get_basic_earning(trade_date):
     ## 5年TTM数据
     ttm_factors = {Balance.__name__: [Balance.symbol,
                                       Balance.total_assets,
-                                      Balance.total_owner_equities
-                                      ],
+                                      Balance.total_owner_equities],
                    CashFlow.__name__: [CashFlow.symbol,
                                        CashFlow.cash_and_equivalents_at_end],
                    Income.__name__: [Income.symbol,
-                                     Income.net_profit,
-                                     ]
+                                     Income.net_profit,]
                    }
     # 通过cache_data.set_cache， 会使得index的name丢失
     ttm_earning_5y = get_ttm_fundamental([], ttm_factors, trade_date, year=5).reset_index()
@@ -535,11 +541,12 @@ if __name__ == '__main__':
         # earning.create_dest_tables()
 
     for date_index in trade_date_sets:
+        print('trade_date: {}'.format(date_index))
         # factor_growth
         start_time = time.time()
         ttm_factor_sets, balance_sets = get_basic_growth_data(date_index)
         growth_sets = pd.merge(ttm_factor_sets, balance_sets, on='symbol')
-        cache_data.set_cache(session1, date_index, growth_sets.to_json(orient='records'))
+        cache_data.set_cache(session1 + str(date_index), date_index, growth_sets.to_json(orient='records'))
         factor_growth.factor_calculate.delay(date_index=date_index, session=session1)
         time1 = time.time()
         print('growth_cal_time:{}'.format(time1 - start_time))
@@ -549,7 +556,7 @@ if __name__ == '__main__':
         valuation_sets = pd.merge(valuation_sets, income_sets, on='symbol')
         valuation_sets = pd.merge(valuation_sets, ttm_factor_sets, on='symbol')
         valuation_sets = pd.merge(valuation_sets, cash_flow_sets, on='symbol')
-        cache_data.set_cache(session2, date_index, valuation_sets.to_json(orient='records'))
+        cache_data.set_cache(session2 + str(date_index), date_index, valuation_sets.to_json(orient='records'))
         historical_value.factor_calculate.delay(date_index=date_index, session=session2)
         time2 = time.time()
         print('history_cal_time:{}'.format(time2 - time1))
@@ -560,7 +567,7 @@ if __name__ == '__main__':
         valuation_sets = pd.merge(valuation_sets, ttm_factor_sets, on='symbol')
         valuation_sets = pd.merge(valuation_sets, cash_flow_sets, on='symbol')
         valuation_sets = pd.merge(valuation_sets, balance_sets, on='symbol')
-        cache_data.set_cache(session3, date_index, valuation_sets.to_json(orient='records'))
+        cache_data.set_cache(session3 + str(date_index), date_index, valuation_sets.to_json(orient='records'))
         factor_per_share_indicators.factor_calculate.delay(date_index=date_index, session=session3)
         time3 = time.time()
         print('per_share_cal_time:{}'.format(time3 - time2))

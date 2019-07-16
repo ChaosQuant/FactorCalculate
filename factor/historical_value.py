@@ -391,9 +391,8 @@ def factor_calculate(**kwargs):
     date_index = kwargs['date_index']
     session = kwargs['session']
     historical_value = HistoricalValue('factor_historical_value')  # 注意, 这里的name要与client中新建table时的name一致, 不然回报错
-    content = cache_data.get_cache(session, date_index)
+    content = cache_data.get_cache(session + str(date_index), date_index)
     total_history_data = json_normalize(json.loads(str(content, encoding='utf8')))
     print("len_history_value_data {}".format(len(total_history_data)))
     calculate(date_index, total_history_data, historical_value)
-
 

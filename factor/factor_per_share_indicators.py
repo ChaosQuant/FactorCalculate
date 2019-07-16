@@ -532,7 +532,7 @@ def factor_calculate(**kwargs):
     date_index = kwargs['date_index']
     session = kwargs['session']
     per_share = PerShareIndicators('factor_per_share')  # 注意, 这里的name要与client中新建table时的name一致, 不然回报错
-    content = cache_data.get_cache(session, date_index)
+    content = cache_data.get_cache(session + str(date_index), date_index)
     total_pre_share_data = json_normalize(json.loads(str(content, encoding='utf8')))
     print("len_total_per_share_data {}".format(len(total_pre_share_data)))
     calculate(date_index, total_pre_share_data, per_share)
