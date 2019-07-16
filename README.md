@@ -13,8 +13,8 @@
 - factor_earning  # 收益质量
 - factor_per_share_indicators  # 收益质量
 
-### client
-程序执行入口
+### /client
+程序执行入口, 文件目录下包含单类因子计算， 以及合并计算
 
 ### sumbit
 分布式计算，提交入口
@@ -22,7 +22,8 @@
 ### init
 初始化分布式计算redis数据库
 
-### q5_cluster_work
-分布式引擎启动
+### cluster_work
+分布式引擎节点启动程序
+
 
 

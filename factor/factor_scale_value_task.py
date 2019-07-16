@@ -1,0 +1,136 @@
+# coding=utf-8
+import time
+
+from pandas.io.json import json_normalize, json
+import pandas as pd
+import math
+import sys
+sys.path.append("../")
+sys.path.append("../../")
+sys.path.append("../../../")
+from factor import app
+
+from factor.factor_base import FactorBase
+from ultron.cluster.invoke.cache_data import cache_data
+
+
+def lcap(tp_historical_value, factor_scale_value):
+    """
+    :param tp_historical_value:
+    :param factor_scale_value:
+    :return:
+    """
+    columns_lists = ['symbol', 'market_cap']
+    historical_value = tp_historical_value.loc[:, columns_lists]
+    historical_value['log_of_mkt_value'] = historical_value['market_cap'].map(lambda x: math.log(abs(x)))
+    historical_value = historical_value.drop(columns=['market_cap'], axis=1)
+    factor_scale_value = pd.merge(factor_scale_value, historical_value, on="symbol")
+    return factor_scale_value
+
+
+def lflo(tp_historical_value, factor_scale_value):
+    """
+    :param tp_historical_value:
+    :param factor_scale_value:
+    :return:
+    """
+    columns_lists = ['symbol', 'circulating_market_cap']
+    historical_value = tp_historical_value.loc[:, columns_lists]
+
+    historical_value['log_of_neg_mkt_value'] = historical_value['circulating_market_cap'].map(
+        lambda x: math.log(abs(x)))
+    historical_value = historical_value.drop(columns=['circulating_market_cap'], axis=1)
+    factor_scale_value = pd.merge(factor_scale_value, historical_value, on="symbol")
+    return factor_scale_value
+
+
+def nlsize(tp_historical_value, factor_scale_value):
+    """
+    :param tp_historical_value:
+    :param factor_scale_value:
+    :return:
+    """
+    columns_lists = ['symbol', 'log_of_mkt_value']
+    historical_value = tp_historical_value.loc[:, columns_lists]
+    historical_value['nl_size'] = historical_value['log_of_mkt_value'].map(
+        lambda x: pow(x, 3))
+    historical_value = historical_value.drop(columns=['log_of_mkt_value'], axis=1)
+    factor_scale_value = pd.merge(factor_scale_value, historical_value, on="symbol")
+    return factor_scale_value
+
+
+def lst(tp_historical_value, factor_scale_value):
+    """
+    :param tp_historical_value:
+    :param factor_scale_value:
+    :return:
+    """
+    columns_lists = ['symbol', 'total_operating_revenue']
+    historical_value = tp_historical_value.loc[:, columns_lists]
+
+    historical_value['log_sales_ttm'] = historical_value['total_operating_revenue'].map(
+        lambda x: math.log(abs(x)))
+    historical_value = historical_value.drop(columns=['total_operating_revenue'], axis=1)
+    factor_scale_value = pd.merge(factor_scale_value, historical_value, on="symbol")
+    return factor_scale_value
+
+
+def ltlqa(tp_historical_value, factor_scale_value):
+    """
+    :param tp_historical_value:
+    :param factor_scale_value:
+    :return:
+    """
+    columns_lists = ['symbol', 'total_assets']
+    historical_value = tp_historical_value.loc[:, columns_lists]
+
+    historical_value['log_total_last_qua_assets'] = historical_value['total_assets'].map(
+        lambda x: math.log(abs(x)))
+    historical_value = historical_value.drop(columns=['total_assets'], axis=1)
+    factor_scale_value = pd.merge(factor_scale_value, historical_value, on="symbol")
+    return factor_scale_value
+
+
+@app.task(ignore_result=True)
+def calculate(**kwargs):
+    """
+    :param trade_date:
+    :return:
+    """
+    fb = FactorBase('factor_scale_value')
+    print(kwargs)
+    factor_name = kwargs['factor_name']
+    session = kwargs['session']
+    trade_date = kwargs['trade_date']
+    content = cache_data.get_cache(session, factor_name)
+    total_data = json_normalize(json.loads(content))
+    print(len(total_data))
+
+    factor_scale_value = lcap(total_data, total_data)
+    factor_scale_value = lflo(factor_scale_value, factor_scale_value)
+    factor_scale_value = nlsize(factor_scale_value, factor_scale_value)
+    factor_scale_value = lst(factor_scale_value, factor_scale_value)
+    factor_scale_value = ltlqa(factor_scale_value, factor_scale_value)
+    factor_scale_value.rename(columns={'market_cap': 'mkt_value',
+                                       'circulating_market_cap': 'cir_mkt_value',
+                                       'total_operating_revenue': 'sales_ttm'},
+                              inplace=True)
+    factor_scale_value = factor_scale_value[['symbol',
+                                             'mkt_value',
+                                             'cir_mkt_value',
+                                             'sales_ttm',
+                                             'total_assets',
+                                             'log_of_mkt_value',
+                                             'log_of_neg_mkt_value',
+                                             'nl_size',
+                                             'log_total_last_qua_assets',
+                                             'log_sales_ttm'
+                                             ]]
+
+    factor_scale_value['id'] = factor_scale_value['symbol'] + str(trade_date)
+    factor_scale_value['trade_date'] = str(trade_date)
+    # super(HistoricalValue, self)._storage_data(factor_scale_value, trade_date)
+    fb._storage_data(factor_scale_value, trade_date)
+
+# calculate(factor_name='scale20180202', trade_date=20180202, session='1562054216473773')
+# calculate(factor_name='scale20180202', trade_date=20180202, session='1562901137622956')
