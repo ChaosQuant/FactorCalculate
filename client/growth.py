@@ -188,7 +188,7 @@ def get_basic_growth_data(trade_date):
 
 
 def prepare_calculate(trade_date):
-    # cash flow
+    # growth
     ttm_factor_sets, balance_sets = get_basic_growth_data(trade_date)
     growth_sets = pd.merge(ttm_factor_sets, balance_sets, on='symbol')
     if len(growth_sets) <= 0:

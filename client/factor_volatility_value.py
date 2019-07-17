@@ -121,7 +121,7 @@ class FactorVolatilityValue(FactorBase):
         temp_price_sets = index_daily_price_sets[index_daily_price_sets.trade_date <= trade_date]
         return sk_daily_price_sets, temp_price_sets[:count]
 
-    def prepaer_calculate(self, trade_date):
+    def prepare_calculate(self, trade_date):
         self.trade_date = trade_date
 
         tp_price_return, temp_price_sets = self.get_basic_data(trade_date)
@@ -159,7 +159,7 @@ class FactorVolatilityValue(FactorBase):
         trade_date_sets = self._trade_date.trade_date_sets_ago(start_date, end_date, count)
         for trade_date in trade_date_sets:
             print('因子计算日期： %s' % trade_date)
-            self.prepaer_calculate(trade_date)
+            self.prepare_calculate(trade_date)
         print('----->')
 
 

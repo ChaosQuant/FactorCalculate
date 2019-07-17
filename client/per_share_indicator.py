@@ -121,7 +121,7 @@ def prepare_calculate(trade_date):
     valuation_sets = pd.merge(valuation_sets, ttm_factor_sets, on='symbol')
     valuation_sets = pd.merge(valuation_sets, cash_flow_sets, on='symbol')
     valuation_sets = pd.merge(valuation_sets, balance_sets, on='symbol')
-    if len(valuation_sets) <= 0 :
+    if len(valuation_sets) <= 0:
         print("%s has no data" % trade_date)
         return
     else:

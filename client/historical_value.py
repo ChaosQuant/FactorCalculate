@@ -142,7 +142,7 @@ def get_basic_history_value_data(trade_date):
 
 
 def prepare_calculate(trade_date):
-    # history_value
+    # historical_value
     valuation_sets, ttm_factor_sets, cash_flow_sets, income_sets = get_basic_history_value_data(trade_date)
     valuation_sets = pd.merge(valuation_sets, income_sets, on='symbol')
     valuation_sets = pd.merge(valuation_sets, ttm_factor_sets, on='symbol')

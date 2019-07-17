@@ -135,7 +135,7 @@ def get_basic_earning(trade_date):
 
 
 def prepare_calculate(trade_date):
-    # cash flow
+    # earning
     tp_earning, ttm_earning_5y, ttm_earning = get_basic_earning(trade_date)
     if len(tp_earning) <= 0 or len(ttm_earning_5y) <= 0 or len(ttm_earning) <= 0:
         print("%s has no data" % trade_date)
