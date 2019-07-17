@@ -17,12 +17,10 @@ import argparse
 from datetime import datetime, timedelta
 from factor import historical_value
 from factor.ttm_fundamental import *
-from vision.file_unit.balance import Balance
 from vision.file_unit.cash_flow import CashFlow
 from vision.file_unit.income import Income
 from vision.file_unit.valuation import Valuation
 from vision.file_unit.industry import Industry
-from vision.file_unit.indicator import Indicator
 from factor.utillities.trade_date import TradeDate
 from ultron.cluster.invoke.cache_data import cache_data
 

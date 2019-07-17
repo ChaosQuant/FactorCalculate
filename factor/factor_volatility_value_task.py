@@ -1,7 +1,7 @@
 # coding=utf-8
 
 from pandas.io.json import json_normalize, json
-
+import pandas as pd
 import numpy as np
 from scipy import stats
 import sys
@@ -417,9 +417,63 @@ def calculate(**kwargs):
             factor_list.append(symbol_calcu(tp_price))
 
     factor_volatility_value = pd.DataFrame(factor_list)
+    factor_volatility_value.rename(columns={
+        'variance_20d': 'Variance20D', 'variance_60d': 'Variance60D', 'variance_120d': 'Variance120D',
+        'kurtosis_20d': 'Kurtosis20D', 'kurtosis_60d': 'Kurtosis60D', 'kurtosis_120d': 'Kurtosis120D',
+        'alpha_20d': 'Alpha20D', 'alpha_60d': 'Alpha60D', 'alpha_120d': 'Alpha120D',
+        'beta_20d': 'Beta20D', 'beta_60d': 'Beta60D', 'beta_120d': 'Beta120D',
+        'sharp_20d': 'Sharp20D', 'sharp_60d': 'Sharp60D', 'sharp_120d': 'Sharp120D',
+        'tr_20d': 'TR20D', 'tr_60d': 'TR60D', 'tr_120d': 'TR120D',
+        'ir_20d': 'IR20D', 'ir_60d': 'IR60D', 'ir_120d': 'IR120D',
+        'gain_variance_20d': 'GainVariance20D', 'gain_variance_60d': 'GainVariance60D',
+        'gain_variance_120d': 'GainVariance120D',
+        'loss_variance_20d': 'LossVariance20D', 'loss_variance_60d': 'LossVariance60D',
+        'loss_variance_120d': 'LossVariance120D',
+        'gain_loss_variance_ratio_20d': 'GainLossVarianceRatio20D',
+        'gain_loss_variance_ratio_60d': 'GainLossVarianceRatio60D',
+        'gain_loss_variance_ratio_120d': 'GainLossVarianceRatio120D',
+        'dastd_252d': 'DailyReturnSTD252D', 'ddnsr_12m': 'DDNSR12M', 'ddncr_12m': 'DDNCR12M', 'dvrat': 'DVRAT'
+    }, inplace=True)
+    factor_volatility_value = factor_volatility_value[[
+        'symbol',
+        'Variance20D',
+        'Variance60D',
+        'Variance120D',
+        'Kurtosis20D',
+        'Kurtosis60D',
+        'Kurtosis120D',
+        'Alpha20D',
+        'Alpha60D',
+        'Alpha120D',
+        'Beta20D',
+        'Beta60D',
+        'Beta120D',
+        'Sharp20D',
+        'Sharp60D',
+        'Sharp120D',
+        'TR20D',
+        'TR60D',
+        'TR120D',
+        'IR20D',
+        'IR60D',
+        'IR120D',
+        'GainVariance20D',
+        'GainVariance60D',
+        'GainVariance120D',
+        'LossVariance20D',
+        'LossVariance60D',
+        'LossVariance120D',
+        'GainLossVarianceRatio20D',
+        'GainLossVarianceRatio60D',
+        'GainLossVarianceRatio120D',
+        'DailyReturnSTD252D',
+        'DDNSR12M',
+        'DDNCR12M',
+        'DVRAT'
+    ]]
+
     factor_volatility_value['id'] = factor_volatility_value['symbol'] + str(trade_date)
     factor_volatility_value['trade_date'] = str(trade_date)
-    # factor_price_momentum.set_index('symbol', inplace=True)
     fb._storage_data(factor_volatility_value, trade_date)
 
 # calculate(factor_name='volatility20180202', trade_date=20180202, session='1562216985610666')

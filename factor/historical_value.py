@@ -47,12 +47,8 @@ class HistoricalValue(FactorBase):
                     `PEG3YChgTTM` decimal(19,4),
                     `PEG5YChgTTM` decimal(19, 4),
                     `PBIndu` decimal(19,4),
-                    `historical_value_lcap_latest` decimal(19,4),
-                    `historical_value_lflo_latest` decimal(19,4),
-                    `historical_value_nlsize_latest` decimal(19,4),
                     `PCFIndu` decimal(19,4),
                     `CEToPTTM` decimal(19,4),
-                    `historical_value_ctop_latest` decimal(19,4),
                     PRIMARY KEY(`id`,`trade_date`,`symbol`)
                     )ENGINE=InnoDB DEFAULT CHARSET=utf8;""".format(self._name)
         super(HistoricalValue, self)._create_tables(create_sql, drop_sql)
@@ -346,12 +342,12 @@ def calculate(trade_date, valuation_sets, historical_value):
     factor_historical_value = historical_value.peg_3y(valuation_sets, factor_historical_value)
     factor_historical_value = historical_value.peg_5y(valuation_sets, factor_historical_value)
     factor_historical_value = historical_value.pb_indu(valuation_sets, factor_historical_value)
-    factor_historical_value = historical_value.lcap(valuation_sets, factor_historical_value)
-    factor_historical_value = historical_value.lflo(factor_historical_value, factor_historical_value)
-    factor_historical_value = historical_value.nlsize(factor_historical_value, factor_historical_value)
+    # factor_historical_value = historical_value.lcap(valuation_sets, factor_historical_value)
+    # factor_historical_value = historical_value.lflo(factor_historical_value, factor_historical_value)
+    # factor_historical_value = historical_value.nlsize(factor_historical_value, factor_historical_value)
     factor_historical_value = historical_value.pcf_indu(valuation_sets, factor_historical_value)
     factor_historical_value = historical_value.cetop(factor_historical_value, factor_historical_value)
-    factor_historical_value = historical_value.ctop(valuation_sets, factor_historical_value)
+    # factor_historical_value = historical_value.ctop(valuation_sets, factor_historical_value)
     # factor_historical_value = historical_value.ctop5(valuation_sets, factor_historical_value)
 
     # etp5 因子没有提出， 使用该部分的时候， 数据库字段需要添加
@@ -360,7 +356,8 @@ def calculate(trade_date, valuation_sets, historical_value):
     #                                                    'EarnToPrice',
     #                                                    'PEIndu', 'PEG3YChgTTM',
     #                                                    'PEG5YChgTTM', 'PBIndu',
-    #                                                    'historical_value_lcap_latest','historical_value_lflo_latest',
+    #                                                    'historical_value_lcap_latest',
+    #                                                    'historical_value_lflo_latest',
     #                                                    'historical_value_nlsize_latest',
     #                                                    'PCFIndu',
     #                                                    'CEToPTTM',
@@ -373,12 +370,9 @@ def calculate(trade_date, valuation_sets, historical_value):
                                                        'PEG3YChgTTM',
                                                        'PEG5YChgTTM',
                                                        'PBIndu',
-                                                       'historical_value_lcap_latest',
-                                                       'historical_value_lflo_latest',
-                                                       'historical_value_nlsize_latest',
                                                        'PCFIndu',
                                                        'CEToPTTM',
-                                                       'historical_value_ctop_latest']]
+                                                       ]]
 
     factor_historical_value['id'] = factor_historical_value['symbol'] + str(trade_date)
     factor_historical_value['trade_date'] = str(trade_date)

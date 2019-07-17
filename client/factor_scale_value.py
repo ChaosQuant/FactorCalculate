@@ -22,7 +22,7 @@ import time
 import collections
 import pandas as pd
 from datetime import datetime, timedelta
-from jpy.factor.factor_base import FactorBase
+from factor.factor_base import FactorBase
 from vision.fm.signletion_engine import *
 from vision.file_unit.income import Income
 from vision.file_unit.valuation import Valuation

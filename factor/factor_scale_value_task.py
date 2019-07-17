@@ -111,21 +111,29 @@ def calculate(**kwargs):
     factor_scale_value = nlsize(factor_scale_value, factor_scale_value)
     factor_scale_value = lst(factor_scale_value, factor_scale_value)
     factor_scale_value = ltlqa(factor_scale_value, factor_scale_value)
-    factor_scale_value.rename(columns={'market_cap': 'mkt_value',
-                                       'circulating_market_cap': 'cir_mkt_value',
-                                       'total_operating_revenue': 'sales_ttm'},
-                              inplace=True)
-    factor_scale_value = factor_scale_value[['symbol',
-                                             'mkt_value',
-                                             'cir_mkt_value',
-                                             'sales_ttm',
-                                             'total_assets',
-                                             'log_of_mkt_value',
-                                             'log_of_neg_mkt_value',
-                                             'nl_size',
-                                             'log_total_last_qua_assets',
-                                             'log_sales_ttm'
-                                             ]]
+    factor_scale_value.rename(columns={
+        'market_cap': 'MktValue',
+        'circulating_market_cap': 'CirMktValue',
+        'total_operating_revenue': 'SalesTTM',
+        'total_assets': 'TotalAssets',
+        'log_of_mkt_value': 'LogofMktValue',
+        'log_of_neg_mkt_value': 'LogofNegMktValue',
+        'nl_size': 'NLSIZE',
+        'log_total_last_qua_assets': 'LogSalesTTM',
+        'log_sales_ttm': 'LogTotalLastQuaAssets'
+    }, inplace=True)
+    factor_scale_value = factor_scale_value[[
+        'symbol',
+        'MktValue',
+        'CirMktValue',
+        'SalesTTM',
+        'TotalAssets',
+        'LogofMktValue',
+        'LogofNegMktValue',
+        'NLSIZE',
+        'LogSalesTTM',
+        'LogTotalLastQuaAssets'
+    ]]
 
     factor_scale_value['id'] = factor_scale_value['symbol'] + str(trade_date)
     factor_scale_value['trade_date'] = str(trade_date)
